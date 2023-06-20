@@ -25,7 +25,7 @@ const Post = ({
   postDate: String;
 }) => {
   return (
-    <div className="max-w-[60%] border-2 border-gray-300 p-4">
+    <div className="max-w-[60%] cursor-pointer border-2 border-gray-300 p-4">
       <div className="flex  ">
         <Image
           src={userProfilePic}

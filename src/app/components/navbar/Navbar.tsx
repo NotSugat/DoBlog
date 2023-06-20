@@ -25,7 +25,7 @@ const Navbar = () => {
         <Avatar />
 
         <button
-          className="flex items-center gap-2 rounded-lg border-2 border-gray-400 px-4 py-2 shadow-sm hover:cursor-pointer "
+          className="flex items-center gap-2 rounded-lg border-2 border-gray-400 px-4 py-2 transition-all hover:cursor-pointer hover:shadow-md "
           onClick={() => setIsCreatePost(!isCreatePost)}
         >
           <BiEdit size={20} />
