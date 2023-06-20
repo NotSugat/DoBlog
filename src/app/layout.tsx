@@ -1,13 +1,10 @@
+"use client";
 import Navbar from "./components/navbar/Navbar";
 import "./globals.css";
 import { Nunito } from "next/font/google";
+import { RecoilRoot } from "recoil";
 
 const font = Nunito({ subsets: ["latin"] });
-
-export const metadata = {
-  title: "Blogsite",
-  description: "Blogging site for any one",
-};
 
 export default function RootLayout({
   children,
@@ -15,11 +12,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <body className={font.className}>
-        <Navbar isCreatePost={false} />
-        {children}
-      </body>
-    </html>
+    <RecoilRoot>
+      <html lang="en">
+        <body className={font.className}>
+          <Navbar />
+          {children}
+        </body>
+      </html>
+    </RecoilRoot>
   );
 }

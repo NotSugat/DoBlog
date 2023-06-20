@@ -6,8 +6,11 @@ import { BiEdit } from "react-icons/bi";
 import Avatar from "../Avatar";
 import { useState } from "react";
 import CreatePost from "../Posts/CreatePost";
+import { useRecoilState } from "recoil";
+import { createPost } from "@/app/recoil/atoms/modalAtoms";
 
-const Navbar = ({ isCreatePost }: { isCreatePost: boolean }) => {
+const Navbar = () => {
+  const [isCreatePost, setIsCreatePost] = useRecoilState(createPost);
   return (
     <nav className="flex items-center justify-between  px-[10%] py-4 shadow-sm">
       <HiMenu size={30} />
@@ -23,7 +26,7 @@ const Navbar = ({ isCreatePost }: { isCreatePost: boolean }) => {
 
         <button
           className="flex items-center gap-2 rounded-lg border-2 border-gray-400 px-4 py-2 shadow-sm hover:cursor-pointer "
-          onClick={() => !isCreatePost}
+          onClick={() => setIsCreatePost(!isCreatePost)}
         >
           <BiEdit size={20} />
           <p className="text-md">Write</p>

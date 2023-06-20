@@ -1,19 +1,22 @@
+"use client";
+import { createPost } from "@/app/recoil/atoms/modalAtoms";
 import Image from "next/image";
 import { useState } from "react";
+import { useRecoilState } from "recoil";
 
 const CreatePost = () => {
-  const [isDialogOpen, setDialogOpen] = useState(true);
+  const [isCreatePost, setIsCreatePost] = useRecoilState(createPost);
 
   const openDialog = () => {
-    setDialogOpen(true);
+    setIsCreatePost(true);
   };
 
   const closeDialog = () => {
-    setDialogOpen(false);
+    setIsCreatePost(false);
   };
   return (
     <div>
-      {isDialogOpen && (
+      {isCreatePost && (
         <div className="fixed inset-0 flex items-center justify-center bg-gray-500 bg-opacity-50">
           <div className="rounded-lg bg-white p-8">
             {/* Dialog content goes here */}
