@@ -2,29 +2,52 @@
 import React, { FormEvent, useState } from "react";
 
 import { useRouter } from "next/navigation";
-import signUp from "../firebase/auth/signup";
-import { signIn } from "next-auth/react";
+import { signUp } from "../firebase/auth/auth";
+import { GoogleAuthProvider, getAuth, signInWithPopup } from "firebase/auth";
 // import { setEngine } from "crypto";
+
+
 
 function SignUp() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const router = useRouter();
 
+  
+  
   const handleForm = async (event: FormEvent) => {
     event.preventDefault();
-
+    
     const { result, error } = await signUp(email, password);
-
+    
     if (error) {
       alert(error);
       return console.log(error);
     }
-
+    
     // else successful
     console.log(result);
     return router.push("/home");
   };
+  
+  const auth = getAuth();
+  const provider = new GoogleAuthProvider();
+
+  const handleGoogleSignIn = async () => {
+    signInWithPopup(auth, provider).then((result) => {
+    const user = result.user;
+    console.log(user);
+    return router.push("/home");
+
+  }).catch((error) => {
+    const errorMessage = error.message;
+
+    console.log(errorMessage);
+
+  });
+  }
+
+
   return (
     <div className="wrapper">
       <div className="form-wrapper">
@@ -56,7 +79,7 @@ function SignUp() {
           </label>
           <button type="submit">Sign up</button>
         </form>
-        <button onClick={() => signIn("google")}>
+        <button onClick={handleGoogleSignIn }>
           <h2 className="text-2xl font-medium">Sign Up with Google</h2>
         </button>
       </div>

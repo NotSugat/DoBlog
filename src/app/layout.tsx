@@ -12,13 +12,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <RecoilRoot>
-      <html lang="en">
+    <html lang="en">
         <body className={font.className}>
-          <Navbar />
+        <RecoilRoot>
           {children}
+        </RecoilRoot>
         </body>
       </html>
-    </RecoilRoot>
   );
 }

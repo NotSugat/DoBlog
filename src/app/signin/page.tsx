@@ -1,7 +1,8 @@
 "use client";
 import React, { FormEvent } from "react";
 import { useRouter } from "next/navigation";
-import signIn from "../firebase/auth/signIn";
+import {  signIn } from "../firebase/auth/auth";
+import { GoogleAuthProvider, getAuth, signInWithPopup } from "firebase/auth";
 
 function SignIn() {
   const [email, setEmail] = React.useState("");
@@ -21,6 +22,24 @@ function SignIn() {
     console.log(result);
     return router.push("/home");
   };
+
+
+    const auth = getAuth();
+  const provider = new GoogleAuthProvider();
+
+  const handleGoogleSignIn = async () => {
+    signInWithPopup(auth, provider).then((result) => {
+    const user = result.user;
+    console.log(user);
+    return router.push("/home");
+
+  }).catch((error) => {
+    const errorMessage = error.message;
+
+    console.log(errorMessage);
+
+  })};
+
   return (
     <div className="wrapper">
       <div className="form-wrapper">
@@ -50,6 +69,9 @@ function SignIn() {
           </label>
           <button type="submit">Sign up</button>
         </form>
+        <button onClick={handleGoogleSignIn}>
+          <h2 className="text-2xl font-medium">Sign Up with Google</h2>
+        </button>
       </div>
     </div>
   );
