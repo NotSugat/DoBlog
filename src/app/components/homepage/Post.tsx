@@ -2,6 +2,8 @@ import Image from "next/image";
 import React from "react";
 import { SignatureHelpTriggerReason } from "typescript";
 import { Url } from "url";
+import { db } from "@/app/firebase/config";
+import { collection, addDoc } from "firebase/firestore";
 
 const Post = ({
   fullName,
@@ -24,6 +26,26 @@ const Post = ({
   postImage: string;
   postDate: String;
 }) => {
+  // await setDoc(doc(db, "cities", "new-city-id"), data);
+  const addPost = async () => {
+    try {
+      const docRef = await addDoc(collection(db, "cities"), {
+        fullName,
+        username,
+        bio,
+        postTitle,
+        postContent,
+        tags,
+        userProfilePic,
+        postImage,
+      });
+
+      console.log("Document written with ID: ", docRef.id);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <div className="max-w-[60%] cursor-pointer border-2 border-gray-300 p-4">
       <div className="flex  ">

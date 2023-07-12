@@ -13,7 +13,7 @@ import { useEffect, useState } from "react";
 
 const Navbar = () => {
   const [isCreatePost, setIsCreatePost] = useRecoilState(createPost);
-  const [user, setUser] = useState<User | null>(null); // 
+  const [user, setUser] = useState<User | null>(null); //
   const router = useRouter();
   const handleSignOut = async () => {
     const { result, error } = await signOutUser();
@@ -28,7 +28,7 @@ const Navbar = () => {
   };
 
   const auth = getAuth();
-  
+
   useEffect(() => {
     auth.onAuthStateChanged((user) => {
       if (!user) {
@@ -36,8 +36,8 @@ const Navbar = () => {
         console.log("no user");
       }
       setUser(user);
-    });  
-  },[]);
+    });
+  }, []);
 
   return (
     <nav className="flex items-center justify-between   py-4 shadow-sm">
@@ -50,9 +50,9 @@ const Navbar = () => {
           <IoNotificationsOutline className="" size={32} />
           <p className="counter">99</p>
         </button>
-        <button onClick={handleSignOut}>
+        <button onClick={handleSignOut} className="flex items-center gap-1 ">
           <Avatar />
-          <h1>{user?.displayName}</h1>
+          <h1 className="font-medium">{user?.displayName}</h1>
         </button>
 
         <button

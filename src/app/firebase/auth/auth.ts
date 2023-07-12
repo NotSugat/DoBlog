@@ -1,5 +1,12 @@
 "use client";
-import { browserSessionPersistence, createUserWithEmailAndPassword, getAuth, setPersistence, signInWithEmailAndPassword, signOut } from "firebase/auth";
+import {
+  browserSessionPersistence,
+  createUserWithEmailAndPassword,
+  getAuth,
+  setPersistence,
+  signInWithEmailAndPassword,
+  signOut,
+} from "firebase/auth";
 import { useRouter } from "next/navigation";
 import firebase_app from "../config";
 
@@ -22,15 +29,14 @@ export async function signIn(email: string, password: string) {
     error = null;
   try {
     setPersistence(auth, browserSessionPersistence)
-  .then(() => {
-    
-    result = signInWithEmailAndPassword(auth, email, password);
-  })
-  .catch((error) => {
-    // Handle Errors here.
-    const errorCode = error.code;
-    const errorMessage = error.message;
-  });
+      .then(() => {
+        result = signInWithEmailAndPassword(auth, email, password);
+      })
+      .catch((error) => {
+        // Handle Errors here.
+        const errorCode = error.code;
+        const errorMessage = error.message;
+      });
 
     result = await signInWithEmailAndPassword(auth, email, password);
   } catch (e) {
@@ -39,8 +45,6 @@ export async function signIn(email: string, password: string) {
 
   return { result, error };
 }
-
-
 
 export async function signUp(email: string, password: string) {
   let result = null,
