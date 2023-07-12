@@ -17,7 +17,7 @@ const Posts = () => {
       />
 
       <Post
-        key={1}
+        key={2}
         fullName="Sphinx Crux"
         username="cruxy"
         userProfilePic="https://pbs.twimg.com/profile_images/994592419705274369/RLplF55e_400x400.jpg"
@@ -29,7 +29,7 @@ const Posts = () => {
         tags={["hello", "world"]}
       />
       <Post
-        key={1}
+        key={3}
         fullName="Sphinx Crux"
         username="cruxy"
         userProfilePic="https://pbs.twimg.com/profile_images/994592419705274369/RLplF55e_400x400.jpg"
@@ -41,7 +41,7 @@ const Posts = () => {
         tags={["hello", "world"]}
       />
       <Post
-        key={1}
+        key={4}
         fullName="Sphinx Crux"
         username="cruxy"
         userProfilePic="https://pbs.twimg.com/profile_images/994592419705274369/RLplF55e_400x400.jpg"
