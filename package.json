@@ -9,10 +9,21 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@editorjs/code": "^2.8.0",
+    "@editorjs/editorjs": "^2.27.2",
+    "@editorjs/embed": "^2.5.3",
+    "@editorjs/header": "^2.7.0",
+    "@editorjs/image": "^2.8.1",
+    "@editorjs/inline-code": "^1.4.0",
+    "@editorjs/link": "^2.5.0",
+    "@editorjs/list": "^1.8.0",
+    "@editorjs/table": "^2.2.2",
+    "@types/editorjs__header": "^2.6.0",
     "@types/node": "18.16.3",
     "@types/react": "18.2.0",
     "@types/react-dom": "18.2.1",
     "autoprefixer": "10.4.14",
+    "axios": "^1.4.0",
     "eslint": "8.39.0",
     "eslint-config-next": "13.3.2",
     "firebase": "^9.22.2",
@@ -21,9 +32,11 @@
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-icons": "^4.8.0",
+    "react-textarea-autosize": "^8.5.2",
     "recoil": "^0.7.7",
     "tailwindcss": "3.3.2",
-    "typescript": "5.0.4"
+    "typescript": "5.0.4",
+    "uuid": "^9.0.0"
   },
   "devDependencies": {
     "prettier": "^2.8.8",
