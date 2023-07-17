@@ -5,11 +5,26 @@ import { FormEvent, useCallback, useEffect, useRef, useState } from "react";
 import { useRecoilState } from "recoil";
 import Avatar from "../Avatar";
 import { IoCloseSharp } from "react-icons/io5";
-import { db } from "@/app/firebase/config";
-import { collection, addDoc } from "firebase/firestore";
+import firebase_app, { db } from "@/app/firebase/config";
+import {
+  collection,
+  addDoc,
+  serverTimestamp,
+  updateDoc,
+  doc,
+} from "firebase/firestore";
 import { auth } from "@/app/firebase/auth/auth";
 import { getAuth } from "firebase/auth";
 import type EditorJS from "@editorjs/editorjs";
+import {
+  getDownloadURL,
+  getStorage,
+  ref,
+  uploadBytesResumable,
+  uploadString,
+} from "firebase/storage";
+//@ts-ignore
+import { v4 as uuidv4 } from "uuid";
 
 const CreatePost = () => {
   const [isCreatePost, setIsCreatePost] = useRecoilState(createPost);
@@ -27,9 +42,17 @@ const CreatePost = () => {
   };
 
   const auth = getAuth();
+  const storage = getStorage();
+  const imageRef = ref(storage, `posts/image`);
+  const postRef = useRef("");
+  // const imageRef = ref(
+  //   storage,
+  //   `posts/image/${auth.currentUser?.uid}/${uuidv4()}`
+  // );
 
   const addPost = async () => {
     try {
+      const downloadURL = await getDownloadURL(imageRef);
       const docRef = await addDoc(collection(db, "posts"), {
         fullName: auth.currentUser?.displayName,
         username: auth.currentUser?.displayName?.split(" ")[0],
@@ -37,7 +60,14 @@ const CreatePost = () => {
         postContent: content,
         userProfilePic: auth.currentUser?.photoURL,
         postImage: "",
+        timestamp: serverTimestamp(),
       });
+      if (downloadURL) {
+        await updateDoc(doc(db, "posts", docRef.id), {
+          image: downloadURL,
+        });
+      }
+      postRef.current = docRef.id;
 
       console.log("Document written with ID: ", docRef.id);
     } catch (error) {
@@ -45,7 +75,7 @@ const CreatePost = () => {
     }
   };
 
-  const ref = useRef<EditorJS>();
+  const editorRef = useRef<EditorJS>();
 
   const intializedEditor = useCallback(async () => {
     const Editorjs = (await import("@editorjs/editorjs")).default;
@@ -59,7 +89,7 @@ const CreatePost = () => {
     const Table = (await import("@editorjs/table")).default; // @ts-ignore
     const ImageTool = (await import("@editorjs/image")).default; // @ts-ignore
 
-    if (!ref.current) {
+    if (!editorRef.current) {
       const editor = new Editorjs({
         /**
          * Id of Element that should contain the Editor
@@ -68,7 +98,7 @@ const CreatePost = () => {
 
         onReady: () => {
           console.log("Editor.js is ready to work!");
-          ref.current = editor;
+          editorRef.current = editor;
         },
         placeholder: "Do blog with one click!",
         inlineToolbar: true,
@@ -82,17 +112,37 @@ const CreatePost = () => {
               endpoint: "api/link",
             },
           },
-          // image: {
-          //   class: ImageTool,
-          //   config: {
-          //     //function call xa async
-          //   },
-          // },
+          image: {
+            class: ImageTool,
+            config: {
+              uploader: {
+                async uploadByFile(file: File) {
+                  console.log(imageRef);
 
+                  var metadata = {
+                    contentType: "image/jpeg",
+                  };
+                  var uploadTask = await uploadBytesResumable(
+                    imageRef,
+                    file,
+                    metadata
+                  );
+                  console.log("Uploaded successfully!", uploadTask);
+                  const downloadURL = await getDownloadURL(imageRef);
+                  console.log(downloadURL);
+                  return {
+                    success: 1,
+                    file: {
+                      url: downloadURL,
+                    },
+                  };
+                },
+              },
+            },
+          },
           list: List,
           embed: Embed,
           code: Code,
-          inlineCode: InlineCode,
           table: Table,
         },
       });
@@ -194,7 +244,7 @@ const CreatePost = () => {
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
               />
-              <div id="editorjs" className="min-h-[500px]" />
+              <div id="editorjs" className="min-h-[100px]" />
 
               <button className="w-full rounded-md bg-gray-300 px-4 py-2 text-lg font-medium hover:opacity-80 ">
                 Post
