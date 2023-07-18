@@ -1,7 +1,5 @@
 import Image from "next/image";
 import React from "react";
-import { SignatureHelpTriggerReason } from "typescript";
-import { Url } from "url";2
 
 const Post = ({
   fullName,
@@ -24,8 +22,6 @@ const Post = ({
   postImage: string;
   postDate: String;
 }) => {
-  
-
   return (
     <div className="max-w-[60%] cursor-pointer border-2 border-gray-300 p-4">
       <div className="flex  ">

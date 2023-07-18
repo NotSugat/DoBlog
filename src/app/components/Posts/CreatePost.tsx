@@ -1,13 +1,11 @@
 "use client";
 import { createPost } from "@/app/recoil/atoms/modalAtoms";
-import Image from "next/image";
 import { FormEvent, useCallback, useEffect, useRef, useState } from "react";
 import { useRecoilState } from "recoil";
 import Avatar from "../Avatar";
 import { IoCloseSharp } from "react-icons/io5";
-import firebase_app, { db } from "@/app/firebase/config";
+import { db } from "@/app/firebase/config";
 import { collection, addDoc, serverTimestamp } from "firebase/firestore";
-import { auth } from "@/app/firebase/auth/auth";
 import { getAuth } from "firebase/auth";
 import type EditorJS from "@editorjs/editorjs";
 import {
@@ -18,6 +16,8 @@ import {
 } from "firebase/storage";
 //@ts-ignore
 import { v4 as uuidv4 } from "uuid";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const CreatePost = () => {
   const [isCreatePost, setIsCreatePost] = useRecoilState(createPost);
@@ -41,6 +41,18 @@ const CreatePost = () => {
     `posts/images/${auth.currentUser?.uid}/${uuidv4()}`
   );
 
+  const notify = () =>
+    toast.success("Blog posted. Do Blog!", {
+      position: "top-center",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "dark",
+    });
+
   const addPost = async () => {
     try {
       const blocks = await editorRef.current?.save();
@@ -53,7 +65,7 @@ const CreatePost = () => {
         userProfilePic: auth.currentUser?.photoURL,
         timestamp: serverTimestamp(),
       });
-
+      notify();
       console.log("Document written with ID: ", docRef.id);
     } catch (error) {
       console.log(error);
@@ -188,8 +200,8 @@ const CreatePost = () => {
     event.preventDefault();
     try {
       await addPost();
-      setTitle("");
-      setContent("");
+
+      closeDialog();
     } catch (error) {
       console.log("can't add to the firebase");
     }
@@ -236,7 +248,6 @@ const CreatePost = () => {
                 onChange={(e) => setTitle(e.target.value)}
               />
               <div id="editorjs" className="min-h-[100px]" />
-
               <button className="w-full rounded-md bg-gray-300 px-4 py-2 text-lg font-medium hover:opacity-80 ">
                 Post
               </button>
