@@ -6,14 +6,12 @@ import { BiEdit } from "react-icons/bi";
 import Avatar from "../Avatar";
 import { useRecoilState } from "recoil";
 import { createPost } from "@/app/recoil/atoms/modalAtoms";
-import { signOutUser } from "@/app/firebase/auth/auth";
+import { auth, signOutUser } from "@/app/firebase/auth/auth";
 import { useRouter } from "next/navigation";
-import { User, getAuth } from "firebase/auth";
-import { useEffect, useState } from "react";
+import { useAuthState } from "react-firebase-hooks/auth";
 
 const Navbar = () => {
   const [isCreatePost, setIsCreatePost] = useRecoilState(createPost);
-  const [user, setUser] = useState<User | null>(null); //
   const router = useRouter();
   const handleSignOut = async () => {
     const { result, error } = await signOutUser();
@@ -26,18 +24,9 @@ const Navbar = () => {
     console.log(result);
     return router.push("/signin");
   };
+  const [user, loading] = useAuthState(auth);
 
-  const auth = getAuth();
-
-  useEffect(() => {
-    auth.onAuthStateChanged((user) => {
-      if (!user) {
-        // return router.push("/signin");
-        console.log("no user");
-      }
-      setUser(user);
-    });
-  }, []);
+  if (loading) return <div>Loading...</div>;
 
   return (
     <nav className="flex items-center justify-between   py-4 shadow-sm">
