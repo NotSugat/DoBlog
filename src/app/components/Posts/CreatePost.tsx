@@ -6,13 +6,7 @@ import { useRecoilState } from "recoil";
 import Avatar from "../Avatar";
 import { IoCloseSharp } from "react-icons/io5";
 import firebase_app, { db } from "@/app/firebase/config";
-import {
-  collection,
-  addDoc,
-  serverTimestamp,
-  updateDoc,
-  doc,
-} from "firebase/firestore";
+import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 import { auth } from "@/app/firebase/auth/auth";
 import { getAuth } from "firebase/auth";
 import type EditorJS from "@editorjs/editorjs";
@@ -21,7 +15,6 @@ import {
   getStorage,
   ref,
   uploadBytesResumable,
-  uploadString,
 } from "firebase/storage";
 //@ts-ignore
 import { v4 as uuidv4 } from "uuid";
@@ -43,31 +36,23 @@ const CreatePost = () => {
 
   const auth = getAuth();
   const storage = getStorage();
-  const imageRef = ref(storage, `posts/image`);
-  const postRef = useRef("");
-  // const imageRef = ref(
-  //   storage,
-  //   `posts/image/${auth.currentUser?.uid}/${uuidv4()}`
-  // );
+  const imageRef = ref(
+    storage,
+    `posts/images/${auth.currentUser?.uid}/${uuidv4()}`
+  );
 
   const addPost = async () => {
     try {
-      const downloadURL = await getDownloadURL(imageRef);
+      const blocks = await editorRef.current?.save();
+
       const docRef = await addDoc(collection(db, "posts"), {
         fullName: auth.currentUser?.displayName,
         username: auth.currentUser?.displayName?.split(" ")[0],
         postTitle: title,
-        postContent: content,
+        postContent: blocks,
         userProfilePic: auth.currentUser?.photoURL,
-        postImage: "",
         timestamp: serverTimestamp(),
       });
-      if (downloadURL) {
-        await updateDoc(doc(db, "posts", docRef.id), {
-          image: downloadURL,
-        });
-      }
-      postRef.current = docRef.id;
 
       console.log("Document written with ID: ", docRef.id);
     } catch (error) {
@@ -160,7 +145,13 @@ const CreatePost = () => {
   useEffect(() => {
     const handleEscapeKey = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
-        closeDialog();
+        const shouldCloseTab = window.confirm(
+          "Are you sure you want to close the tab?"
+        );
+
+        if (shouldCloseTab) {
+          closeDialog();
+        }
       }
     };
 
