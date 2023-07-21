@@ -223,7 +223,13 @@ const CreatePost = () => {
             </div>
 
             <div className="mt-2 flex items-center">
-              <Avatar />
+              <Avatar
+                imgSrc={
+                  auth.currentUser
+                    ? auth?.currentUser?.photoURL
+                    : "/images/profile.jpg"
+                }
+              />
               <div>
                 <div className="ml-4 ">
                   <p className=" text-md font-medium leading-4">

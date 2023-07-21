@@ -1,9 +1,9 @@
 import Image from "next/image";
 
-const Avatar = () => {
+const Avatar = ({ imgSrc }: { imgSrc: String | null }) => {
   return (
     <Image
-      src="/images/profile.jpg"
+      src={imgSrc?.toString() || "/images/profile.jpg"}
       alt="profile pic"
       height={40}
       width={40}
