@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { signIn } from "../firebase/auth/auth";
 import { GoogleAuthProvider, getAuth, signInWithPopup } from "firebase/auth";
 import { FcGoogle } from "react-icons/fc";
+import Link from "next/link";
 
 function SignIn() {
   const [email, setEmail] = React.useState("");
@@ -90,9 +91,12 @@ function SignIn() {
           </h2>
         </button>
 
-        <p className="mt-2 cursor-pointer text-center text-sm text-gray-200 transition-all duration-150 ease-in-out hover:text-white">
+        <Link
+          href="/signup"
+          className="mt-2 flex cursor-pointer items-center justify-center  text-center text-sm text-gray-200 transition-all duration-150 ease-in-out hover:text-white"
+        >
           Not on DoBlog yet? Sign Up
-        </p>
+        </Link>
       </div>
     </div>
   );
