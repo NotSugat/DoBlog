@@ -1,11 +1,10 @@
 "use client";
 import { ToastContainer } from "react-toastify";
-import Navbar from "./components/navbar/Navbar";
 import "./globals.css";
-import { Nunito } from "next/font/google";
+import { Poppins } from "next/font/google";
 import { RecoilRoot } from "recoil";
 
-const font = Nunito({ subsets: ["latin"] });
+const font = Poppins({ weight: "400", subsets: ["latin"] });
 
 export default function RootLayout({
   children,
