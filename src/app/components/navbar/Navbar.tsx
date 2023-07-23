@@ -40,7 +40,11 @@ const Navbar = () => {
           <p className="counter">99</p>
         </button>
         <button onClick={handleSignOut} className="flex items-center gap-1 ">
-          <Avatar imgSrc={user ? user?.photoURL : "/images/profile.jpg"} />
+          <Avatar
+            imgSrc={user ? user?.photoURL : "/images/profile.jpg"}
+            height={40}
+            width={40}
+          />
           <h1 className="font-medium">{user?.displayName}</h1>
         </button>
 

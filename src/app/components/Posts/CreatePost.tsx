@@ -59,7 +59,7 @@ const CreatePost = () => {
 
       const docRef = await addDoc(collection(db, "posts"), {
         fullName: auth.currentUser?.displayName,
-        username: auth.currentUser?.displayName?.split(" ")[0],
+        username: auth.currentUser?.displayName?.split(" ")[0].toLowerCase(),
         postTitle: title,
         postContent: blocks,
         userProfilePic: auth.currentUser?.photoURL,
