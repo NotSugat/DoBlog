@@ -1,57 +1,29 @@
+import { useEffect, useState } from "react";
 import Post from "./Post";
+import { DocumentData, collection, getDocs } from "firebase/firestore";
+import { db } from "@/app/firebase/config";
 
 const Posts = () => {
+  const [posts, setPosts] = useState<DocumentData>([]);
+
+  const getPosts = async () => {
+    const querySnapshot = await getDocs(collection(db, "posts"));
+    const data = querySnapshot.docs.map((doc) => ({
+      id: doc.id,
+      data: doc.data(),
+    }));
+    setPosts(data);
+  };
+
+  useEffect(() => {
+    getPosts();
+  }, [db]);
+
   return (
     <div>
-      <Post
-        key={1}
-        fullName="Sphinx Crux"
-        username="cruxy"
-        userProfilePic="https://pbs.twimg.com/profile_images/994592419705274369/RLplF55e_400x400.jpg"
-        bio="Mrbeast6000 is better"
-        postTitle="Last to leave circle gets $500000 fsdajf sadf saddf dasf sadf asd fgad fds fsa fsdaf sda afads fsa fga fsdafdsa"
-        postContent="CGRS has big shoes to fill and I hope he’s having a great experience! It’s tough not being able to play with your full roster though so keep that in mind when watching PRX"
-        postImage="https://i.ytimg.com/vi/zxYjTTXc-J8/maxresdefault.jpg"
-        postDate="2 hr ago"
-        tags={["hello", "world"]}
-      />
-
-      <Post
-        key={2}
-        fullName="Sphinx Crux"
-        username="cruxy"
-        userProfilePic="https://pbs.twimg.com/profile_images/994592419705274369/RLplF55e_400x400.jpg"
-        bio="Mrbeast6000 is better"
-        postTitle="Last to leave circle gets $500000 fsdajf sadf saddf dasf sadf asd fgad fds fsa fsdaf sda afads fsa fga fsdafdsa"
-        postContent="CGRS has big shoes to fill and I hope he’s having a great experience! It’s tough not being able to play with your full roster though so keep that in mind when watching PRX"
-        postImage="https://i.ytimg.com/vi/zxYjTTXc-J8/maxresdefault.jpg"
-        postDate="2 hr ago"
-        tags={["hello", "world"]}
-      />
-      <Post
-        key={3}
-        fullName="Sphinx Crux"
-        username="cruxy"
-        userProfilePic="https://pbs.twimg.com/profile_images/994592419705274369/RLplF55e_400x400.jpg"
-        bio="Mrbeast6000 is better"
-        postTitle="Last to leave circle gets $500000 fsdajf sadf saddf dasf sadf asd fgad fds fsa fsdaf sda afads fsa fga fsdafdsa"
-        postContent="CGRS has big shoes to fill and I hope he’s having a great experience! It’s tough not being able to play with your full roster though so keep that in mind when watching PRX"
-        postImage="https://i.ytimg.com/vi/zxYjTTXc-J8/maxresdefault.jpg"
-        postDate="2 hr ago"
-        tags={["hello", "world"]}
-      />
-      <Post
-        key={4}
-        fullName="Sphinx Crux"
-        username="cruxy"
-        userProfilePic="https://pbs.twimg.com/profile_images/994592419705274369/RLplF55e_400x400.jpg"
-        bio="Mrbeast6000 is better"
-        postTitle="Last to leave circle gets $500000 fsdajf sadf saddf dasf sadf asd fgad fds fsa fsdaf sda afads fsa fga fsdafdsa"
-        postContent="CGRS has big shoes to fill and I hope he’s having a great experience! It’s tough not being able to play with your full roster though so keep that in mind when watching PRX"
-        postImage="https://i.ytimg.com/vi/zxYjTTXc-J8/maxresdefault.jpg"
-        postDate="2 hr ago"
-        tags={["hello", "world"]}
-      />
+      {posts.map((post: any) => (
+        <Post key={post.id} id={post.id} post={post.data} />
+      ))}
     </div>
   );
 };
