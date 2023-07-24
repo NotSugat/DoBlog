@@ -21,6 +21,7 @@ const Post = ({ id, post }: { id: string; post: DocumentData }) => {
   const [text, setText] = useState("");
   const [image, setImage] = useState<BlockImage[]>([]);
   const [isBookmarked, setIsBookmarked] = useState<Boolean>(false);
+  const [isInterested, setIsInterested] = useState<Boolean>(true);
 
   const getContent = () => {
     {
@@ -89,32 +90,37 @@ const Post = ({ id, post }: { id: string; post: DocumentData }) => {
 
   return (
     <div
-      className="h-[20rem] max-w-[60%]  border-2 border-gray-300 p-4"
+      className=" w-full border-2 border-gray-300  p-4 lg:h-[20rem] lg:max-w-[60%]"
       onClick={info}
     >
       <div className="flex">
         <Avatar imgSrc={post.userProfilePic} height={50} width={50} />
-        <div>
-          <div className="ml-4 flex items-center gap-2">
-            <p className=" text-md cursor-pointer font-medium leading-4">
-              {post.fullName + " ."}
+        <div className="flex w-full items-start justify-between  lg:block">
+          <div className="ml-4 flex flex-col lg:flex-row  lg:items-center lg:gap-2">
+            <p className="cursor-pointer  text-xs font-medium lg:text-base ">
+              {post.fullName}
             </p>
-            <p className="text-md cursor-pointer text-gray-500">{`@${post.username}`}</p>
-            .
-            <p className="text-md  select-none text-gray-500">
+            <span className="hidden lg:block">.</span>
+            <p className=" cursor-pointer text-xs text-gray-500 lg:text-base">{`@${post.username}`}</p>
+            <span className="hidden lg:block">.</span>
+            <p className="hidden select-none text-sm text-gray-500 lg:block xl:text-base">
               {getPostTime()}
             </p>
           </div>
-          <p className="text-md ml-4 text-gray-500">{`bio`}</p>
+          <p className="select-none text-xs text-gray-500 lg:hidden ">
+            {getPostTime()}
+          </p>
+          <p className="text-md ml-4 hidden text-gray-500 lg:block">{`bio`}</p>
         </div>
       </div>
 
-      <div className="grid  grid-cols-3">
-        <div className="col-span-2 max-h-[40%] max-w-[90%]  ">
-          <h2 className=" truncate-overflow py-2  text-2xl font-medium">
+      {/* Post content tile and content */}
+      <div className="grid  grid-cols-3  py-4 lg:py-0">
+        <div className="col-span-2 max-h-[40%]   ">
+          <h2 className=" truncate-overflow  py-2 text-lg font-medium leading-5 lg:text-2xl">
             {post.postTitle}
           </h2>
-          <p className="truncate-overflow-text text-lg">{text}</p>
+          <p className="truncate-overflow-text text-sm lg:text-lg">{text}</p>
         </div>
         <div className="col-span-1 flex items-center justify-center ">
           {image.length > 0 && (
@@ -123,12 +129,14 @@ const Post = ({ id, post }: { id: string; post: DocumentData }) => {
               alt="User image"
               width={1000}
               height={1000}
-              className=" aspect-square h-44 w-44   rounded-lg object-cover hover:cursor-pointer hover:opacity-80"
+              className=" aspect-square h-24 w-24 rounded-lg object-cover   hover:cursor-pointer hover:opacity-80 lg:h-44 lg:w-44"
             />
           )}
         </div>
       </div>
-      <div className="flex max-w-[60%] items-center justify-between  p-1 ">
+
+      {/* Tags and options */}
+      <div className="flex w-full items-center justify-between p-1 lg:max-w-[60%] ">
         <div>
           <Tag tagName="Mrbeast6000" />
           <Tag tagName="2v2" />
@@ -137,30 +145,26 @@ const Post = ({ id, post }: { id: string; post: DocumentData }) => {
         <div className="b right-0 mr-4 flex items-center gap-1">
           {!isBookmarked ? (
             <button onClick={() => setIsBookmarked(true)} title="Set Bookmark">
-              <BsBookmarkPlus
-                size={32}
-                className="cursor-pointer p-1 transition-all duration-150 ease-in-out hover:fill-green-700"
-              />
+              <BsBookmarkPlus className=" cursor-pointer  p-1 text-2xl transition-all duration-150 ease-in-out hover:fill-green-700 lg:text-4xl" />
             </button>
           ) : (
             <button
               onClick={() => setIsBookmarked(false)}
               title="Remove Bookmark"
             >
-              <BsBookmarkFill
-                size={32}
-                className="cursor-pointer p-1 transition-all duration-150 ease-in-out hover:fill-red-500"
-              />
+              <BsBookmarkFill className="cursor-pointer p-1 text-2xl transition-all duration-150 ease-in-out hover:fill-red-500 lg:text-4xl" />
             </button>
           )}
-          <button title="Not Interested">
+          <button
+            title="Not Interested"
+            onClick={() => setIsInterested(!isInterested)}
+          >
             <AiOutlineMinusCircle
-              size={32}
-              className="post-icon hover:fill-red-500"
+              className={`post-icon   ${isInterested ? "" : "fill-red-500"}`}
             />
           </button>
           <button title="More Settings">
-            <BiDotsHorizontal size={32} className="post-icon" />
+            <BiDotsHorizontal className="post-icon" />
           </button>
         </div>
       </div>

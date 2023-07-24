@@ -7,7 +7,7 @@
 }
 
 .post-icon {
-  @apply cursor-pointer  rounded-full p-1 transition-all duration-150 ease-in-out  hover:bg-gray-200;
+  @apply cursor-pointer  rounded-full p-1 text-2xl transition-all duration-150 ease-in-out  hover:bg-gray-200 lg:text-4xl;
 }
 
 .counter {
@@ -17,14 +17,18 @@
 .truncate-overflow {
   --max-lines: 2;
   position: relative;
-  max-height: calc(2.4rem * var(--max-lines));
   overflow: hidden;
   padding-right: 1rem;
+  @apply max-h-[calc(1.5rem_*_var(--max-lines))] lg:max-h-[calc(2.4rem_*_var(--max-lines))];
 }
 .truncate-overflow-text {
   --max-lines: 3;
   position: relative;
-  max-height: calc(1.75rem * var(--max-lines));
   overflow: hidden;
   padding-right: 1rem;
+  @apply max-h-[calc(1.25rem_*_var(--max-lines))] lg:max-h-[calc(1.75rem_*_var(--max-lines))];
+}
+
+.truncate-overflow-text-x {
+  @apply truncate-overflow;
 }
