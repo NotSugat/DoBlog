@@ -90,7 +90,7 @@ const Post = ({ id, post }: { id: string; post: DocumentData }) => {
 
   return (
     <div
-      className=" w-full border-2 border-gray-300  p-4 lg:h-[20rem] lg:max-w-[60%]"
+      className=" w-full border-2  border-gray-300 p-4 lg:h-[20rem] lg:max-w-[60%]"
       onClick={info}
     >
       <div className="flex">
@@ -115,7 +115,7 @@ const Post = ({ id, post }: { id: string; post: DocumentData }) => {
       </div>
 
       {/* Post content tile and content */}
-      <div className="grid  grid-cols-3  py-4 lg:py-0">
+      <div className="grid  cursor-pointer  grid-cols-3 py-4 lg:py-0">
         <div className="col-span-2 max-h-[40%]   ">
           <h2 className=" truncate-overflow  py-2 text-lg font-medium leading-5 lg:text-2xl">
             {post.postTitle}
