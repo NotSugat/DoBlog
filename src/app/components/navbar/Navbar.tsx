@@ -29,7 +29,7 @@ const Navbar = () => {
   if (loading) return <div>Loading...</div>;
 
   return (
-    <nav className="flex items-center justify-between   py-4 shadow-sm">
+    <nav className="sticky top-0 flex items-center   justify-between  bg-gray-200 py-4 shadow-sm backdrop-filter">
       <HiMenu size={30} />
 
       <h1 className="text-2xl font-bold tracking-wide">DoBlog</h1>
