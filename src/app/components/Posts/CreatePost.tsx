@@ -22,7 +22,6 @@ import "react-toastify/dist/ReactToastify.css";
 const CreatePost = () => {
   const [isCreatePost, setIsCreatePost] = useRecoilState(createPost);
   const [title, setTitle] = useState("");
-  const [content, setContent] = useState("");
   const [enabled, setEnabled] = useState<boolean>(false);
   const titleInputRef = useRef<HTMLInputElement>(null);
 

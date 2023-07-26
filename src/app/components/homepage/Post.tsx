@@ -1,13 +1,13 @@
-import { DocumentData } from "firebase/firestore";
+import { DocumentData, addDoc, collection } from "firebase/firestore";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import Avatar from "../Avatar";
 import { AiOutlineMinusCircle } from "react-icons/ai";
-import { FaRegCommentDots } from "react-icons/fa";
 import { BsBookmarkPlus, BsBookmarkFill } from "react-icons/bs";
 import { BiDotsHorizontal } from "react-icons/bi";
-import { get } from "http";
 import Tag from "../Tag";
+import { db } from "@/app/firebase/config";
+import { auth } from "@/app/firebase/auth/auth";
 
 interface BlockFile {
   url: string;
@@ -40,6 +40,7 @@ const Post = ({ id, post }: { id: string; post: DocumentData }) => {
       setImage(blockImages);
     }
   };
+
   const info = () => {
     const firebaseTimestamp = post.timestamp.seconds * 1000;
 
@@ -52,6 +53,7 @@ const Post = ({ id, post }: { id: string; post: DocumentData }) => {
     console.log(post.timestamp.toMillis());
     console.log(getPostTime());
   };
+
   const getPostTime = () => {
     const firebaseTimestamp = post.timestamp.seconds * 1000;
 
@@ -82,6 +84,21 @@ const Post = ({ id, post }: { id: string; post: DocumentData }) => {
     }
 
     return formattedTime;
+  };
+
+  const addBookmark = async () => {
+    try {
+      const docRef = await addDoc(
+        collection(db, "bookmarks", "users", `${auth?.currentUser?.uid}`),
+        {
+          postID: id,
+        }
+      );
+
+      console.log("Bookmark added with ID: ", docRef.id);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   useEffect(() => {
@@ -137,14 +154,20 @@ const Post = ({ id, post }: { id: string; post: DocumentData }) => {
 
       {/* Tags and options */}
       <div className="flex w-full items-center justify-between p-1 lg:max-w-[60%] ">
-        <div>
+        <div className="space-x-2">
           <Tag tagName="Mrbeast6000" />
           <Tag tagName="2v2" />
         </div>
 
         <div className="b right-0 mr-4 flex items-center gap-1">
           {!isBookmarked ? (
-            <button onClick={() => setIsBookmarked(true)} title="Set Bookmark">
+            <button
+              onClick={() => {
+                addBookmark();
+                setIsBookmarked(true);
+              }}
+              title="Set Bookmark"
+            >
               <BsBookmarkPlus className=" cursor-pointer  p-1 text-2xl transition-all duration-150 ease-in-out hover:fill-green-700 lg:text-4xl" />
             </button>
           ) : (
