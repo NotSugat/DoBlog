@@ -1,6 +1,16 @@
-import { DocumentData, addDoc, collection } from "firebase/firestore";
+import {
+  DocumentData,
+  addDoc,
+  collection,
+  deleteDoc,
+  doc,
+  getDoc,
+  getDocs,
+  setDoc,
+  updateDoc,
+} from "firebase/firestore";
 import Image from "next/image";
-import React, { useEffect, useState } from "react";
+import React, { MutableRefObject, useEffect, useRef, useState } from "react";
 import Avatar from "../Avatar";
 import { AiOutlineMinusCircle } from "react-icons/ai";
 import { BsBookmarkPlus, BsBookmarkFill } from "react-icons/bs";
@@ -22,6 +32,7 @@ const Post = ({ id, post }: { id: string; post: DocumentData }) => {
   const [image, setImage] = useState<BlockImage[]>([]);
   const [isBookmarked, setIsBookmarked] = useState<Boolean>(false);
   const [isInterested, setIsInterested] = useState<Boolean>(true);
+  const bookmarkRef = useRef<HTMLButtonElement>(null);
 
   const getContent = () => {
     {
@@ -52,6 +63,7 @@ const Post = ({ id, post }: { id: string; post: DocumentData }) => {
     console.log("timeDiff", timeDiff);
     console.log(post.timestamp.toMillis());
     console.log(getPostTime());
+    console.log("Bookmark no: ", post.bookmarkCount);
   };
 
   const getPostTime = () => {
@@ -86,19 +98,42 @@ const Post = ({ id, post }: { id: string; post: DocumentData }) => {
     return formattedTime;
   };
 
-  const addBookmark = async () => {
+  const handleBookmark = async () => {
     try {
-      const docRef = await addDoc(
-        collection(db, "bookmarks", "users", `${auth?.currentUser?.uid}`),
-        {
-          postID: id,
-        }
-      );
+      if (!isBookmarked) {
+        const bookmarkRef = await addDoc(
+          collection(db, "bookmarks", "users", `${auth?.currentUser?.uid}`),
+          {
+            postID: id,
+          }
+        );
+        const docRef = doc(db, "posts", id);
+        const docSnap = await getDoc(docRef);
 
-      console.log("Bookmark added with ID: ", docRef.id);
+        const currentBookmarkCount = docSnap.data()?.bookmarkCount || 0;
+
+        const newBookmarkCount = currentBookmarkCount + 1;
+
+        await setDoc(docRef, {
+          ...docSnap.data(),
+          bookmarkCount: newBookmarkCount,
+        });
+
+        console.log("Bookmark no: ", post.bookmarkCount);
+        console.log("Bookmark added with ID: ", bookmarkRef.id);
+      }
     } catch (error) {
       console.log(error);
     }
+  };
+  const getBookmark = async () => {
+    const querySnapshot = await getDocs(
+      collection(db, "bookmarks", "users", `${auth?.currentUser?.uid}`)
+    );
+    const data = querySnapshot.docs.map((doc) => ({
+      id: doc.id,
+      data: doc.data(),
+    }));
   };
 
   useEffect(() => {
@@ -163,7 +198,7 @@ const Post = ({ id, post }: { id: string; post: DocumentData }) => {
           {!isBookmarked ? (
             <button
               onClick={() => {
-                addBookmark();
+                handleBookmark();
                 setIsBookmarked(true);
               }}
               title="Set Bookmark"

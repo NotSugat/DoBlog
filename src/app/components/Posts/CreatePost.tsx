@@ -63,6 +63,7 @@ const CreatePost = () => {
         postContent: blocks,
         userProfilePic: auth.currentUser?.photoURL,
         timestamp: serverTimestamp(),
+        bookmarkCount: 0,
       });
       notify();
       console.log("Document written with ID: ", docRef.id);
