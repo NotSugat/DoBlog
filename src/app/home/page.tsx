@@ -10,7 +10,7 @@ import Navbar from "../components/navbar/Navbar";
 const HomePage = () => {
   const isCreatePost = useRecoilValue(createPost);
   return (
-    <div className="m-auto max-w-[80%] ">
+    <div className="m-auto ">
       <Navbar />
 
       <Search />

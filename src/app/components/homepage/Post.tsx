@@ -121,6 +121,30 @@ const Post = ({ id, post }: { id: string; post: DocumentData }) => {
 
         console.log("Bookmark no: ", post.bookmarkCount);
         console.log("Bookmark added with ID: ", bookmarkRef.id);
+      } else {
+        const bookmarks = await getDocs(
+          collection(db, "bookmarks", "users", `${auth?.currentUser?.uid}`)
+        );
+        const bookmarkID = bookmarks.docs.find(
+          (doc) => id === doc.data().postID
+        );
+
+        if (bookmarkID) {
+          await deleteDoc(bookmarkID.ref);
+
+          // Update the bookmarkCount for the post
+          const docRef = doc(db, "posts", id);
+          const docSnap = await getDoc(docRef);
+          const currentBookmarkCount = docSnap.data()?.bookmarkCount || 0;
+          const newBookmarkCount = currentBookmarkCount - 1;
+
+          await setDoc(docRef, {
+            ...docSnap.data(),
+            bookmarkCount: newBookmarkCount,
+          });
+          console.log("Bookmark no: ", post.bookmarkCount);
+          console.log("Bookmark deleted with ID: ", bookmarkID.ref);
+        }
       }
     } catch (error) {
       console.log(error);
@@ -141,10 +165,7 @@ const Post = ({ id, post }: { id: string; post: DocumentData }) => {
   }, []);
 
   return (
-    <div
-      className=" w-full border-2  border-gray-300 p-4 lg:h-[20rem] lg:max-w-[60%]"
-      onClick={info}
-    >
+    <div className=" w-full border-2  border-gray-300 p-4 lg:h-[20rem] lg:max-w-[60%]">
       <div className="flex">
         <Avatar imgSrc={post.userProfilePic} height={50} width={50} />
         <div className="flex w-full items-start justify-between  lg:block">
@@ -207,7 +228,10 @@ const Post = ({ id, post }: { id: string; post: DocumentData }) => {
             </button>
           ) : (
             <button
-              onClick={() => setIsBookmarked(false)}
+              onClick={() => {
+                handleBookmark();
+                setIsBookmarked(false);
+              }}
               title="Remove Bookmark"
             >
               <BsBookmarkFill className="cursor-pointer p-1 text-2xl transition-all duration-150 ease-in-out hover:fill-red-500 lg:text-4xl" />

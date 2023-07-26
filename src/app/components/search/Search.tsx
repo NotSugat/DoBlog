@@ -3,7 +3,7 @@ import Tag from "../Tag";
 
 const Search = () => {
   return (
-    <div className="my-12 flex items-center">
+    <div className="mx-auto my-12 flex max-w-[80%] items-center">
       <form className="flex items-center gap-2 rounded-full border-2 border-gray-400 px-2">
         <BiSearchAlt size={24} className="fill-gray-600" />
         <input
