@@ -29,14 +29,14 @@ const Navbar = () => {
   if (loading) return <div>Loading...</div>;
 
   return (
-    <nav className="sticky top-0 flex items-center   justify-between  bg-gray-100 px-[10%] py-4 shadow-sm backdrop-filter">
-      <HiMenu size={30} />
+    <nav className="sticky top-0 flex items-center justify-between   bg-gray-100  px-[5%] py-4 shadow-md backdrop-filter lg:px-[10%]">
+      <HiMenu className="text-2xl lg:text-4xl" />
 
-      <h1 className="text-2xl font-bold tracking-wide">DoBlog</h1>
+      <h1 className="text-xl font-bold tracking-wide lg:text-2xl">DoBlog</h1>
 
       <div className="flex items-center gap-6">
         <button className="icon">
-          <IoNotificationsOutline className="" size={32} />
+          <IoNotificationsOutline className="text-2xl lg:text-[2rem]" />
           <p className="counter">99</p>
         </button>
         <button onClick={handleSignOut} className="flex items-center gap-1 ">
@@ -45,15 +45,15 @@ const Navbar = () => {
             height={40}
             width={40}
           />
-          <h1 className="font-medium">{user?.displayName}</h1>
+          <h1 className="hidden font-medium lg:block">{user?.displayName}</h1>
         </button>
 
         <button
-          className="flex items-center gap-2 rounded-lg border-2 border-gray-400 px-4 py-2 transition-all hover:cursor-pointer hover:shadow-md "
+          className="hover:shadow-m flex items-center gap-2 rounded-lg border-2 border-gray-400 px-2 py-1 transition-all hover:cursor-pointer  lg:px-4 lg:py-2 "
           onClick={() => setIsCreatePost(!isCreatePost)}
         >
-          <BiEdit size={20} />
-          <p className="text-md">Write</p>
+          <BiEdit className="text-xl lg:text-2xl" />
+          <p className="lg:text-md text-sm">Write</p>
         </button>
       </div>
     </nav>

@@ -11,7 +11,7 @@
 }
 
 .counter {
-  @apply absolute right-0 flex h-5 w-5 items-center justify-center rounded-full bg-red-400 text-[0.6rem];
+  @apply absolute right-0 flex h-4 w-4 items-center justify-center rounded-full bg-red-400 text-[0.55rem] lg:h-5 lg:w-5 lg:text-[0.6rem];
 }
 
 .truncate-overflow {
