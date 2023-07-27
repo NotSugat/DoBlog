@@ -1,13 +1,21 @@
 import { useEffect, useState } from "react";
 import Post from "./Post";
-import { DocumentData, collection, getDocs } from "firebase/firestore";
+import {
+  DocumentData,
+  collection,
+  getDocs,
+  orderBy,
+  query,
+} from "firebase/firestore";
 import { db } from "@/app/firebase/config";
 
 const Posts = () => {
   const [posts, setPosts] = useState<DocumentData>([]);
 
   const getPosts = async () => {
-    const querySnapshot = await getDocs(collection(db, "posts"));
+    const querySnapshot = await getDocs(
+      query(collection(db, "posts"), orderBy("timestamp", "desc"))
+    );
     const data = querySnapshot.docs.map((doc) => ({
       id: doc.id,
       data: doc.data(),
