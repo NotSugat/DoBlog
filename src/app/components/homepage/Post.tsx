@@ -132,7 +132,6 @@ const Post = ({ id, post }: { id: string; post: DocumentData }) => {
         if (bookmarkID) {
           await deleteDoc(bookmarkID.ref);
 
-          // Update the bookmarkCount for the post
           const docRef = doc(db, "posts", id);
           const docSnap = await getDoc(docRef);
           const currentBookmarkCount = docSnap.data()?.bookmarkCount || 0;
@@ -159,6 +158,22 @@ const Post = ({ id, post }: { id: string; post: DocumentData }) => {
       data: doc.data(),
     }));
   };
+
+  // set Bookmark as true if post is bookmarked when component loads
+  useEffect(() => {
+    const checkBookmark = async () => {
+      const bookmarks = await getDocs(
+        collection(db, "bookmarks", "users", `${auth?.currentUser?.uid}`)
+      );
+      const bookmarkID = bookmarks.docs.find((doc) => id === doc.data().postID);
+
+      if (bookmarkID) {
+        setIsBookmarked(true);
+      }
+    };
+
+    checkBookmark();
+  }, []);
 
   useEffect(() => {
     getContent();
