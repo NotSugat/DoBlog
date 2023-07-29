@@ -32,7 +32,6 @@ const Post = ({ id, post }: { id: string; post: DocumentData }) => {
   const [image, setImage] = useState<BlockImage[]>([]);
   const [isBookmarked, setIsBookmarked] = useState<Boolean>(false);
   const [isInterested, setIsInterested] = useState<Boolean>(true);
-  const bookmarkRef = useRef<HTMLButtonElement>(null);
 
   const getContent = () => {
     {
@@ -53,17 +52,7 @@ const Post = ({ id, post }: { id: string; post: DocumentData }) => {
   };
 
   const info = () => {
-    const firebaseTimestamp = post.timestamp.seconds * 1000;
-
-    const currentTimestamp = new Date().getTime();
-
-    const timeDiff = currentTimestamp - firebaseTimestamp;
-    console.log(firebaseTimestamp);
-    console.log(currentTimestamp);
-    console.log("timeDiff", timeDiff);
-    console.log(post.timestamp.toMillis());
-    console.log(getPostTime());
-    console.log("Bookmark no: ", post.bookmarkCount);
+    console.log(image);
   };
 
   const getPostTime = () => {
@@ -203,7 +192,10 @@ const Post = ({ id, post }: { id: string; post: DocumentData }) => {
       </div>
 
       {/* Post content tile and content */}
-      <div className="grid  cursor-pointer  grid-cols-3 py-4 lg:py-0">
+      <div
+        className="grid  cursor-pointer  grid-cols-3 py-4 lg:py-0"
+        onClick={() => info()}
+      >
         <div className="col-span-2 max-h-[40%]   ">
           <h2 className=" truncate-overflow  py-2 text-lg font-medium leading-5 lg:text-2xl">
             {post.postTitle}
