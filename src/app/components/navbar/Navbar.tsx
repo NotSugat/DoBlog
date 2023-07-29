@@ -29,7 +29,7 @@ const Navbar = () => {
   if (loading) return <div>Loading...</div>;
 
   return (
-    <nav className="sticky top-0 z-10 flex items-center   justify-between  bg-gray-100 px-[5%] py-4 shadow-md backdrop-filter lg:px-[10%]">
+    <nav className="sticky top-0 z-10 flex items-center   justify-between  bg-gray-100 px-[5%] py-2 shadow-md backdrop-filter lg:px-[10%]">
       <HiMenu className="text-2xl lg:text-4xl" />
 
       <h1 className="text-xl font-bold tracking-wide lg:text-2xl">DoBlog</h1>
