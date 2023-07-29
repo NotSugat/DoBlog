@@ -40,14 +40,36 @@ const PostPage = ({ params }: PostPageProps) => {
   const [user, loading] = useAuthState(auth);
   const [isLiked, setIsLiked] = useState<Boolean>(false);
   const [isBookmarked, setIsBookmarked] = useState<Boolean>(false);
+  const [text, setText] = useState("");
+  const [image, setImage] = useState<BlockImage[]>([]);
 
   const router = useRouter();
   const id = params.postId;
   const [post, setPost] = useState<DocumentData>({});
 
+  const getContent = () => {
+    {
+      const blockTexts = post.postContent?.blocks
+        .filter((block: any) => block.type === "paragraph")
+        .map((block: any) => block.data.text);
+
+      const blockImages: BlockImage[] = post.postContent?.blocks
+        .filter((block: any) => block.type === "image")
+        .map((block: any) => ({
+          caption: block.data.caption,
+          file: block.data.file,
+        }));
+
+      setText(blockTexts);
+      setImage(blockImages);
+    }
+  };
+
   const info = () => {
     console.log(post);
     console.log(post.timestamp.toDate().toDateString());
+    console.log(text);
+    console.log(image);
   };
 
   const handleLike = async () => {};
@@ -119,6 +141,7 @@ const PostPage = ({ params }: PostPageProps) => {
     };
 
     getPost();
+    getContent();
   }, []);
 
   if (loading)
