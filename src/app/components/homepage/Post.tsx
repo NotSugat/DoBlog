@@ -18,6 +18,7 @@ import { BiDotsHorizontal } from "react-icons/bi";
 import Tag from "../Tag";
 import { db } from "@/app/firebase/config";
 import { auth } from "@/app/firebase/auth/auth";
+import { useRouter } from "next/navigation";
 
 interface BlockFile {
   url: string;
@@ -32,6 +33,7 @@ const Post = ({ id, post }: { id: string; post: DocumentData }) => {
   const [image, setImage] = useState<BlockImage[]>([]);
   const [isBookmarked, setIsBookmarked] = useState<Boolean>(false);
   const [isInterested, setIsInterested] = useState<Boolean>(true);
+  const router = useRouter();
 
   const getContent = () => {
     {
@@ -194,7 +196,7 @@ const Post = ({ id, post }: { id: string; post: DocumentData }) => {
       {/* Post content tile and content */}
       <div
         className="grid  cursor-pointer  grid-cols-3 py-4 lg:py-0"
-        onClick={() => info()}
+        onClick={() => router.push(`/post/${id}`)}
       >
         <div className="col-span-2 max-h-[40%]   ">
           <h2 className=" truncate-overflow  py-2 text-lg font-medium leading-5 lg:text-2xl">
