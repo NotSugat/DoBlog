@@ -1,5 +1,7 @@
 "use client";
 import Avatar from "@/app/components/Avatar";
+import EditorOutput from "@/app/components/EditorOutput";
+import Tag from "@/app/components/Tag";
 import Navbar from "@/app/components/navbar/Navbar";
 import { auth } from "@/app/firebase/auth/auth";
 import { db } from "@/app/firebase/config";
@@ -35,41 +37,46 @@ interface BlockImage {
   caption: string;
   file: BlockFile;
 }
+interface Item {
+  blocks: Array<{
+    data?: {
+      text?: string;
+      caption?: string;
+      file?: {
+        url?: string;
+      };
+      items?: string[];
+    };
+    stretched?: boolean;
+    withBackground?: boolean;
+    withBorder?: boolean;
+    style?: string;
+    id: string;
+    type: string;
+  }>;
+}
 
 const PostPage = ({ params }: PostPageProps) => {
   const [user, loading] = useAuthState(auth);
   const [isLiked, setIsLiked] = useState<Boolean>(false);
   const [isBookmarked, setIsBookmarked] = useState<Boolean>(false);
-  const [text, setText] = useState("");
-  const [image, setImage] = useState<BlockImage[]>([]);
+  const [blocks, setBlocks] = useState([]);
+  const [followed, setFollowed] = useState<Boolean>(false);
 
   const router = useRouter();
   const id = params.postId;
   const [post, setPost] = useState<DocumentData>({});
 
   const getContent = () => {
-    {
-      const blockTexts = post.postContent?.blocks
-        .filter((block: any) => block.type === "paragraph")
-        .map((block: any) => block.data.text);
+    const blockItems = post.postContent?.blocks.map((block: any) => block.data);
 
-      const blockImages: BlockImage[] = post.postContent?.blocks
-        .filter((block: any) => block.type === "image")
-        .map((block: any) => ({
-          caption: block.data.caption,
-          file: block.data.file,
-        }));
-
-      setText(blockTexts);
-      setImage(blockImages);
-    }
+    setBlocks(blockItems);
   };
 
   const info = () => {
     console.log(post);
     console.log(post.timestamp.toDate().toDateString());
-    console.log(text);
-    console.log(image);
+    console.log(post.postContent);
   };
 
   const handleLike = async () => {};
@@ -152,7 +159,7 @@ const PostPage = ({ params }: PostPageProps) => {
   return (
     <div onClick={() => info()}>
       <Navbar />
-      <div className="mx-auto mt-8 max-w-[60%] border-2">
+      <div className="mx-auto mt-8 max-w-[40%] ">
         <h2 className=" py-4 text-4xl font-bold ">{post.postTitle}</h2>
 
         {/* User Profile section  */}
@@ -166,9 +173,12 @@ const PostPage = ({ params }: PostPageProps) => {
               <span className="hidden lg:block">.</span>
               <p className=" cursor-pointer text-xs text-gray-500 lg:text-base">{`@${post.username}`}</p>
               <span className="hidden lg:block">.</span>
-              <p className=" cursor-pointer text-xs text-green-600 transition  hover:text-green-800 lg:text-base">
-                Follow
-              </p>
+              <span
+                className={` cursor-pointer select-none text-xs text-green-600  transition hover:text-green-800 lg:text-base`}
+                onClick={() => setFollowed(!followed)}
+              >
+                {followed ? "Following" : "Follow"}
+              </span>
             </div>
 
             <p className="text-md ml-4 hidden text-gray-500 lg:block">
@@ -240,6 +250,55 @@ const PostPage = ({ params }: PostPageProps) => {
               <BiDotsHorizontal className="post-icon" />
             </button>
           </div>
+        </div>
+
+        {/* Block preview */}
+        <div className="mt-8">
+          <EditorOutput content={post.postContent} />
+
+          <div className="mt-8 flex flex-wrap gap-4">
+            <Tag tagName={"Design"} />
+            <Tag tagName={"UI/UX"} />
+          </div>
+        </div>
+
+        {/* User info section */}
+        <div className=" mt-8 bg-[#e7e5e5] px-4 py-8">
+          <div className="flex items-center  justify-between py-4 ">
+            <Image
+              src={post.userProfilePic}
+              alt="profile pic"
+              height={1000}
+              width={1000}
+              className="h-8 w-8 rounded-full border-2 border-gray-400 p-[1px] shadow-sm  hover:cursor-pointer hover:opacity-80 lg:h-20 lg:w-20"
+            />
+
+            <div>
+              <button
+                className={`rounded-full ${
+                  followed
+                    ? "border-2 border-black bg-transparent text-black"
+                    : "bg-[#111]"
+                } px-4 py-2 text-white `}
+                onClick={() => setFollowed(!followed)}
+              >
+                {followed ? "Following" : "Follow"}
+              </button>
+            </div>
+          </div>
+
+          <h2 className="text-bold  cursor-pointer text-sm lg:text-2xl">
+            Written by {post.fullName}
+          </h2>
+          <p className="text-sm text-gray-700  lg:text-base">
+            99.12k Followers
+          </p>
+          <p className=" mt-2 text-base ">bio is the bio and bio is my bio</p>
+
+          <p className=" mt-2 text-base">
+            <span className="font-semibold">More from </span>
+            <span className=" cursor-pointer text-xs text-gray-700 transition-colors hover:text-gray-900 lg:text-base">{`@${post.username}`}</span>
+          </p>
         </div>
       </div>
     </div>

@@ -171,7 +171,7 @@ const Post = ({ id, post }: { id: string; post: DocumentData }) => {
   }, []);
 
   return (
-    <div className=" w-full border-2  border-gray-300 p-4 lg:h-[20rem] lg:max-w-[60%]">
+    <div className=" w-full border-2  border-gray-300 p-4 lg:max-h-[20rem] lg:max-w-[60%]">
       <div className="flex">
         <Avatar imgSrc={post.userProfilePic} height={50} width={50} />
         <div className="flex w-full items-start justify-between  lg:block">
@@ -195,7 +195,7 @@ const Post = ({ id, post }: { id: string; post: DocumentData }) => {
 
       {/* Post content tile and content */}
       <div
-        className="grid  cursor-pointer  grid-cols-3 py-4 lg:py-0"
+        className="grid   cursor-pointer grid-cols-3  py-4 lg:py-0"
         onClick={() => router.push(`/post/${id}`)}
       >
         <div className="col-span-2 max-h-[40%]   ">

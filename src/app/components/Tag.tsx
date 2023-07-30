@@ -5,7 +5,7 @@ const Tag = ({ tagName }: { tagName: String }) => {
   return (
     <button
       className={`rounded-full ${
-        isClicked ? "bg-black text-white" : "bg-gray-200"
+        isClicked ? "bg-black text-white" : "bg-gray-300"
       }  px-2 py-1 text-sm transition-all duration-300 ease-in-out hover:translate-y-[-0.5rem] hover:cursor-pointer hover:bg-black hover:text-white lg:px-4 lg:py-2`}
       onClick={() => setIsClicked(!isClicked)}
     >
