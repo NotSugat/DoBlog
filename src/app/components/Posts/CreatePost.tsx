@@ -57,6 +57,7 @@ const CreatePost = () => {
       const blocks = await editorRef.current?.save();
 
       const docRef = await addDoc(collection(db, "posts"), {
+        id: auth.currentUser?.uid,
         fullName: auth.currentUser?.displayName,
         username: auth.currentUser?.displayName?.split(" ")[0].toLowerCase(),
         postTitle: title,
@@ -186,13 +187,13 @@ const CreatePost = () => {
     const init = async () => {
       await intializedEditor();
 
-      setTimeout(() => {});
+      setTimeout(() => { });
     };
 
     if (enabled) {
       init();
 
-      return () => {};
+      return () => { };
     }
   }, [enabled, intializedEditor]);
 
@@ -235,9 +236,8 @@ const CreatePost = () => {
                   <p className=" text-md font-medium leading-4">
                     {auth.currentUser?.displayName}
                   </p>
-                  <p className="text-md text-gray-500">{`@${
-                    auth.currentUser?.displayName?.split(" ")[0]
-                  }`}</p>
+                  <p className="text-md text-gray-500">{`@${auth.currentUser?.displayName?.split(" ")[0]
+                    }`}</p>
                 </div>
               </div>
             </div>

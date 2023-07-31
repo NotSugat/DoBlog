@@ -16,7 +16,7 @@ import {
   deleteDoc,
 } from "firebase/firestore";
 import Image from "next/image";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { AiFillHeart, AiOutlineHeart, AiOutlineShareAlt } from "react-icons/ai";
@@ -79,7 +79,7 @@ const PostPage = ({ params }: PostPageProps) => {
     console.log(post.postContent);
   };
 
-  const handleLike = async () => {};
+  const handleLike = async () => { };
 
   const handleBookmark = async () => {
     try {
@@ -159,7 +159,7 @@ const PostPage = ({ params }: PostPageProps) => {
   return (
     <div onClick={() => info()}>
       <Navbar />
-      <div className="mx-auto mt-8 max-w-[40%] ">
+      <div className="mx-auto mt-8 w-[90%] lg:max-w-[40%] ">
         <h2 className=" py-4 text-4xl font-bold ">{post.postTitle}</h2>
 
         {/* User Profile section  */}
@@ -275,11 +275,10 @@ const PostPage = ({ params }: PostPageProps) => {
 
             <div>
               <button
-                className={`rounded-full ${
-                  followed
-                    ? "border-2 border-black bg-transparent text-black"
-                    : "bg-[#111]"
-                } px-4 py-2 text-white `}
+                className={`rounded-full ${followed
+                  ? "border-2 border-black bg-transparent text-black"
+                  : "bg-[#111] text-white"
+                  } px-4 py-2`}
                 onClick={() => setFollowed(!followed)}
               >
                 {followed ? "Following" : "Follow"}
