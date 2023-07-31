@@ -7,7 +7,6 @@ import Avatar from "../Avatar";
 import { IoCloseSharp } from "react-icons/io5";
 import { db } from "@/app/firebase/config";
 import { collection, addDoc, serverTimestamp } from "firebase/firestore";
-import { getAuth } from "firebase/auth";
 import type EditorJS from "@editorjs/editorjs";
 import {
   getDownloadURL,
@@ -25,7 +24,6 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import { BiDotsHorizontal } from "react-icons/bi";
 
 const CreatePost = () => {
-  const [isCreatePost, setIsCreatePost] = useRecoilState(createPost);
   const [title, setTitle] = useState("");
   const [enabled, setEnabled] = useState<boolean>(false);
   const titleInputRef = useRef<HTMLInputElement>(null);
@@ -182,7 +180,7 @@ const CreatePost = () => {
 
   return (
     <div>
-      <div className="flex items-center px-[20%]   py-4 justify-between shadow-md">
+      <div className="flex items-center px-[20%] py-2 justify-between shadow-md sticky top-0 z-10 bg-gray-100 ">
         <div className="flex items-center gap-4 ">
           <button
             onClick={() => router.push("/")}
@@ -203,23 +201,20 @@ const CreatePost = () => {
 
       </div>
 
+      {/* form section*/}
       <form
         action="submit"
         onSubmit={handleSubmit}
-        className="mx-auto  w-[90%] lg:max-w-[50%] rounded-md border border-gray-200 p-4 "
+        className="mx-auto  w-[90%] lg:max-w-[50%] rounded-md border border-gray-200 p-4"
       >
         <input
           placeholder="Title"
           ref={titleInputRef}
-          className="h-full w-full resize-none py-2 text-2xl font-bold outline-none"
+          className="h-full w-full resize-none px-4 py-2 text-xl lg:text-3xl font-bold outline-none bg-transparent"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
         />
-        <div id="editorjs" className="min-h-[100px] bg-red-400" />
-        <div>Hello wrold</div>
-        <button className="w-full rounded-md bg-gray-300 px-4 py-2 text-lg font-medium hover:opacity-80 ">
-          Post
-        </button>
+        <div id="editorjs" className="min-h-full  max-w-[80%]  mx-auto " />
       </form>
 
     </div>
