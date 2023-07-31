@@ -1,3 +1,4 @@
+
 "use client";
 import { createPost } from "@/app/recoil/atoms/modalAtoms";
 import { FormEvent, useCallback, useEffect, useRef, useState } from "react";
@@ -18,6 +19,10 @@ import {
 import { v4 as uuidv4 } from "uuid";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useRouter } from "next/navigation";
+import { auth } from "../firebase/auth/auth";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { BiDotsHorizontal } from "react-icons/bi";
 
 const CreatePost = () => {
   const [isCreatePost, setIsCreatePost] = useRecoilState(createPost);
@@ -25,20 +30,14 @@ const CreatePost = () => {
   const [enabled, setEnabled] = useState<boolean>(false);
   const titleInputRef = useRef<HTMLInputElement>(null);
 
-  const openDialog = () => {
-    setIsCreatePost(true);
-  };
-
-  const closeDialog = () => {
-    setIsCreatePost(false);
-  };
-
-  const auth = getAuth();
+  const [user, loading] = useAuthState(auth)
   const storage = getStorage();
   const imageRef = ref(
     storage,
     `posts/images/${auth.currentUser?.uid}/${uuidv4()}`
   );
+  const router = useRouter();
+
 
   const notify = () =>
     toast.success("Blog posted. Do Blog!", {
@@ -52,11 +51,13 @@ const CreatePost = () => {
       theme: "dark",
     });
 
+
   const addPost = async () => {
     try {
       const blocks = await editorRef.current?.save();
 
       const docRef = await addDoc(collection(db, "posts"), {
+        id: auth.currentUser?.uid,
         fullName: auth.currentUser?.displayName,
         username: auth.currentUser?.displayName?.split(" ")[0].toLowerCase(),
         postTitle: title,
@@ -87,6 +88,7 @@ const CreatePost = () => {
     const ImageTool = (await import("@editorjs/image")).default; // @ts-ignore
 
     if (!editorRef.current) {
+      console.log("Initialization of editor js is happening");
       const editor = new Editorjs({
         /**
          * Id of Element that should contain the Editor
@@ -146,35 +148,6 @@ const CreatePost = () => {
     }
   }, []);
 
-  // focus the input field when the dialog is open
-  useEffect(() => {
-    if (titleInputRef.current) {
-      titleInputRef.current.focus();
-    }
-  }, []);
-
-  // Escape key to close the dialog
-  useEffect(() => {
-    const handleEscapeKey = (event: KeyboardEvent) => {
-      if (event.key === "Escape") {
-        const shouldCloseTab = window.confirm(
-          "Are you sure you want to close the tab?"
-        );
-
-        if (shouldCloseTab) {
-          closeDialog();
-        }
-      }
-    };
-
-    if (isCreatePost) {
-      document.addEventListener("keydown", handleEscapeKey);
-    }
-
-    return () => {
-      document.removeEventListener("keydown", handleEscapeKey);
-    };
-  }, [isCreatePost]);
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -191,7 +164,6 @@ const CreatePost = () => {
 
     if (enabled) {
       init();
-
       return () => { };
     }
   }, [enabled, intializedEditor]);
@@ -201,67 +173,57 @@ const CreatePost = () => {
     try {
       await addPost();
 
-      closeDialog();
     } catch (error) {
       console.log("can't add to the firebase");
     }
   };
 
+  if (!user && !loading) router.push("/signin");
+
   return (
     <div>
-      {isCreatePost && (
-        <div className="fixed inset-0 flex  items-center justify-center bg-gray-500 bg-opacity-50">
-          <div className="w-[90%] rounded-lg bg-white p-8 md:w-[400px] xl:w-[600px]">
-            <div className="relative border-b-2 border-gray-400  text-center">
-              <h2 className="text-2xl font-medium">Create Post</h2>
-              <button
-                className="absolute right-1 top-0 rounded-full p-1 transition-all duration-200 ease-in-out hover:cursor-pointer hover:bg-gray-200 hover:fill-red-500"
-                onClick={closeDialog}
-              >
-                <IoCloseSharp size={20} />
-              </button>
-            </div>
+      <div className="flex items-center px-[20%]   py-4 justify-between shadow-md">
+        <div className="flex items-center gap-4 ">
+          <button
+            onClick={() => router.push("/")}
+            className="text-xl font-bold tracking-wide lg:text-2xl"
+          >
+            DoBlog
+          </button>
+          <p className="text-xl lg:text-xl font-thin text-gray-500">Draft in {user?.displayName}</p>
 
-            <div className="mt-2 flex items-center">
-              <Avatar
-                imgSrc={
-                  auth.currentUser
-                    ? auth?.currentUser?.photoURL
-                    : "/images/profile.jpg"
-                }
-              />
-              <div>
-                <div className="ml-4 ">
-                  <p className=" text-md font-medium leading-4">
-                    {auth.currentUser?.displayName}
-                  </p>
-                  <p className="text-md text-gray-500">{`@${auth.currentUser?.displayName?.split(" ")[0]
-                    }`}</p>
-                </div>
-              </div>
-            </div>
-            <form
-              action="submit"
-              onSubmit={handleSubmit}
-              className="mt-4 rounded-md border border-gray-200 p-4 "
-            >
-              <input
-                placeholder="Title"
-                ref={titleInputRef}
-                className="h-full w-full resize-none py-2 text-2xl font-bold outline-none"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-              />
-              <div id="editorjs" className="min-h-[100px]" />
-              <button className="w-full rounded-md bg-gray-300 px-4 py-2 text-lg font-medium hover:opacity-80 ">
-                Post
-              </button>
-            </form>
-          </div>
         </div>
-      )}
-    </div>
-  );
-};
 
-export default CreatePost;
+        <div className="flex items-center gap-2">
+          <button className="px-4 py-2 bg-green-100 rounded-full">Publish</button>
+          <button title="More Settings">
+            <BiDotsHorizontal className="post-icon" />
+          </button>
+        </div>
+
+      </div>
+
+      <form
+        action="submit"
+        onSubmit={handleSubmit}
+        className="mx-auto  w-[90%] lg:max-w-[50%] rounded-md border border-gray-200 p-4 "
+      >
+        <input
+          placeholder="Title"
+          ref={titleInputRef}
+          className="h-full w-full resize-none py-2 text-2xl font-bold outline-none"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+        />
+        <div id="editorjs" className="min-h-[100px] bg-red-400" />
+        <div>Hello wrold</div>
+        <button className="w-full rounded-md bg-gray-300 px-4 py-2 text-lg font-medium hover:opacity-80 ">
+          Post
+        </button>
+      </form>
+
+    </div>
+  )
+}
+
+export default CreatePost; 

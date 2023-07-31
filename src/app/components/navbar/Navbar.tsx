@@ -55,7 +55,7 @@ const Navbar = () => {
 
         <button
           className="hover:shadow-m flex items-center gap-2 rounded-lg border-2 border-gray-400 px-2 py-1 transition-all hover:cursor-pointer  lg:px-4 lg:py-2 "
-          onClick={() => setIsCreatePost(!isCreatePost)}
+          onClick={() => router.push("/new-blog")}
         >
           <BiEdit className="text-xl lg:text-2xl" />
           <p className="lg:text-md text-sm">Write</p>
