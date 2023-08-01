@@ -12,13 +12,14 @@ import {
 import Image from "next/image";
 import React, { MutableRefObject, useEffect, useRef, useState } from "react";
 import Avatar from "../Avatar";
-import { AiOutlineMinusCircle } from "react-icons/ai";
+import { AiOutlineArrowUp, AiOutlineMinusCircle } from "react-icons/ai";
 import { BsBookmarkPlus, BsBookmarkFill } from "react-icons/bs";
 import { BiDotsHorizontal } from "react-icons/bi";
 import Tag from "../Tag";
 import { db } from "@/app/firebase/config";
 import { auth } from "@/app/firebase/auth/auth";
 import { useRouter } from "next/navigation";
+import { Menu } from "@headlessui/react";
 
 interface BlockFile {
   url: string;
@@ -171,7 +172,7 @@ const Post = ({ id, post }: { id: string; post: DocumentData }) => {
   }, []);
 
   return (
-    <div className=" w-full border-2  border-gray-300 p-4 lg:max-h-[20rem] lg:max-w-[60%]">
+    <div className="relative w-full border-2  border-gray-300 p-4 lg:max-h-[20rem] lg:max-w-[60%]">
       <div className="flex">
         <Avatar imgSrc={post.userProfilePic} height={50} width={50} />
         <div className="flex w-full items-start justify-between  lg:block">
@@ -254,9 +255,36 @@ const Post = ({ id, post }: { id: string; post: DocumentData }) => {
               className={`post-icon   ${isInterested ? "" : "fill-red-500"}`}
             />
           </button>
-          <button title="More Settings">
-            <BiDotsHorizontal className="post-icon" />
-          </button>
+          <Menu>
+            <Menu.Button title="More settings">
+              <BiDotsHorizontal className="post-icon" />
+            </Menu.Button>
+            <Menu.Items className="absolute translate-y-[calc(1.75rem_+_1.5rem_+_1.5rem)] translate-x-8 grid place-items-start bg-gray-200 px-2 text-gray-700 z-20 rounded-sm">
+              <Menu.Item disabled >
+                <span className="opacity-75 flex w-full justify-center text-xl p-2"> <AiOutlineArrowUp /></span>
+              </Menu.Item>
+
+              <Menu.Item>
+                {({ active }) => (
+                  <a
+                    className={`${active && 'bg-blue-500'} p-1`}
+                    href="/account-settings"
+                  >
+                    Mute this author
+                  </a>
+                )}
+              </Menu.Item>
+              <Menu.Item>
+                {({ active }) => (
+                  <button
+                    className={`${active && 'bg-blue-500'} w-full text-start p-1`}
+                  >
+                    Report
+                  </button>
+                )}
+              </Menu.Item>
+            </Menu.Items>
+          </Menu>
         </div>
       </div>
     </div>

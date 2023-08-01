@@ -170,6 +170,7 @@ const CreatePost = () => {
     event.preventDefault();
     try {
       await addPost();
+      router.push("/");
 
     } catch (error) {
       console.log("can't add to the firebase");
@@ -193,7 +194,7 @@ const CreatePost = () => {
         </div>
 
         <div className="flex items-center gap-2">
-          <button className="px-4 py-2 bg-green-100 rounded-full">Publish</button>
+          <button className={`px-4 py-2 ${title ? "bg-green-400" : "bg-green-100"} rounded-full`} onClick={handleSubmit}>Publish</button>
           <button title="More Settings">
             <BiDotsHorizontal className="post-icon" />
           </button>
@@ -214,7 +215,7 @@ const CreatePost = () => {
           value={title}
           onChange={(e) => setTitle(e.target.value)}
         />
-        <div id="editorjs" className="min-h-full  max-w-[80%]  mx-auto " />
+        <div id="editorjs" className="min-h-full  max-w-[80%]  mx-auto text-base lg:text-xl " />
       </form>
 
     </div>
