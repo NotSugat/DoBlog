@@ -28,7 +28,7 @@ const Posts = () => {
   }, [db]);
 
   return (
-    <div className="mx-auto max-w-[80%]">
+    <div className="">
       {posts.map((post: any) => (
         <Post key={post.id} id={post.id} post={post.data} />
       ))}

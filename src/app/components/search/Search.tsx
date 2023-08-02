@@ -3,7 +3,7 @@ import Tag from "../Tag";
 
 const Search = () => {
   return (
-    <div className="mx-auto  max-w-[80%] items-center gap-4 space-y-4 border-4 border-gray-200 px-4 py-8">
+    <div className="items-center gap-4 space-y-4 border-4 border-gray-200 px-4 py-8">
       <div>
         <div className="flex items-center gap-2">
           <h2 className="text-xl font-medium lg:text-2xl">Discover new </h2>
