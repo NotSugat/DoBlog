@@ -47,8 +47,6 @@ const Navbar = () => {
         <button onClick={handleSignOut} className="flex items-center gap-1 ">
           <Avatar
             imgSrc={user ? user?.photoURL : "/images/profile.jpg"}
-            height={40}
-            width={40}
           />
           <h1 className="hidden font-medium lg:block">{user?.displayName}</h1>
         </button>

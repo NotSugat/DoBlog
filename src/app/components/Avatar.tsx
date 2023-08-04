@@ -1,21 +1,22 @@
 import Image from "next/image";
+import { cn } from "../lib/utils";
+import { useState } from "react";
 
 const Avatar = ({
   imgSrc,
-  height,
-  width,
+  className,
 }: {
   imgSrc: String | null;
-  height?: number;
-  width?: number;
+  className?: string,
 }) => {
+
   return (
     <Image
       src={imgSrc?.toString() || "/images/profile.jpg"}
       alt="profile pic"
-      height={height || 40}
-      width={width || 40}
-      className="h-8 w-8 rounded-full border-2 border-gray-400 p-[1px] shadow-sm  hover:cursor-pointer hover:opacity-80 lg:h-12 lg:w-12"
+      height={100}
+      width={100}
+      className={cn("h-8 w-8 rounded-full border-2 border-gray-400 p-[1px] shadow-sm  hover:cursor-pointer hover:opacity-80 lg:h-12 lg:w-12", className)}
     />
   );
 };

@@ -1,24 +1,30 @@
-import Bookmark from "./Bookmark"
-import Person from "./Person"
+import Image from "next/image";
+import { cn } from "../lib/utils";
+import { useState } from "react";
 
-const Recommendation = () => {
+const Avatar = ({
+  imgSrc,
+  height,
+  width,
+  className,
+}: {
+  imgSrc: String | null;
+  height?: number;
+  width?: number;
+  className: string,
+}) => {
+  const [pending, setPending] = useState(false)]
   return (
-    <div className="hidden xl:block">
-      <div className="border-2">
-        <p className="text-xl px-4 py-2">People you might be interested</p>
-        <Person fullName={"Elon musk"} username="xuser" bio="bio" userProfilePic="" />
-        <Person fullName={"Sugat Sujakhu"} username="sugat" bio="bio" userProfilePic="" />
-      </div>
+    <Image
+      src={imgSrc?.toString() || "/images/profile.jpg"}
+      alt="profile pic"
+      height={height || 40}
+      width={width || 40}
+      className={cn("h-8 w-8 rounded-full border-2 border-gray-400 p-[1px] shadow-sm  hover:cursor-pointer hover:opacity-80 lg:h-12 lg:w-12", className, {
+        "bg-gray-500": pending
+      })}
+    />
+  );
+};
 
-      <div >
-        <p className="text-xl px-4 font-semibold" >Continue Reading</p>
-
-
-        <Bookmars />
-      </div>
-
-    </div>
-  )
-}
-
-export default Recommendation
+export default Avatar;

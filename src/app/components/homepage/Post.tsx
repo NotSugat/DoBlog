@@ -162,7 +162,7 @@ const Post = ({ id, post }: { id: string; post: DocumentData }) => {
   return (
     <div className="relative w-full border-2  border-gray-300 p-4 lg:max-h-[20rem] ">
       <div className="flex">
-        <Avatar imgSrc={post.userProfilePic} height={50} width={50} />
+        <Avatar imgSrc={post.userProfilePic} />
         <div className="flex w-full items-start justify-between  lg:block">
           <div className="ml-4 flex flex-col lg:flex-row  lg:items-center lg:gap-2">
             <p className="cursor-pointer  text-xs font-medium lg:text-base ">
