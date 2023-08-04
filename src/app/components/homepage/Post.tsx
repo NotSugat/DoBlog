@@ -188,10 +188,10 @@ const Post = ({ id, post }: { id: string; post: DocumentData }) => {
         onClick={() => router.push(`/post/${id}`)}
       >
         <div className="col-span-2 max-h-[40%]   ">
-          <h2 className=" truncate-overflow  py-2 text-lg font-medium leading-5 lg:text-2xl">
+          <h2 className=" truncate-overflow-2  py-2 text-lg font-medium leading-5 lg:text-2xl">
             {post.postTitle}
           </h2>
-          <p className="truncate-overflow-text text-sm lg:text-lg">{text}</p>
+          <p className="truncate-overflow-3 text-sm lg:text-lg">{text}</p>
         </div>
         <div className="col-span-1 flex items-center justify-center ">
           {image.length > 0 && (

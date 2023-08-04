@@ -74,8 +74,7 @@ const Bookmark = ({ id }: { id: string }) => {
   }, []);
 
   useEffect(() => {
-    console.log("postContent:", post.postContent);
-    console.log("blocks:", post.postContent?.blocks);
+    console.log("postContent:", post.postContent); console.log("blocks:", post.postContent?.blocks);
 
     getDate();
     getContent();
@@ -103,8 +102,8 @@ const Bookmark = ({ id }: { id: string }) => {
         />
       )}
       <div>
-        <h2 className=" truncate-overflow-xl font-semibold text-xl">{post.postTitle}</h2>
-        <p className="truncate-overflow-text-2 text-lg">{text}</p>
+        <h2 className=" truncate-overflow-2 font-semibold text-xl">{post.postTitle}</h2>
+        <p className="truncate-overflow-2 text-lg">{text}</p>
         <div className="flex items-center gap-2">
           <Image alt={`Porfile pictue of ${post.fullName} `} src={post.userProfilePic} height={1000} width={1000} className="h-6 w-6 rounded-full border-2 shadow-md" />
           <p className=" cursor-pointer text-gray-500 text-sm">{`@${post.username} `}</p>
