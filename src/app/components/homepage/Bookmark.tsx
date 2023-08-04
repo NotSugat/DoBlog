@@ -91,14 +91,14 @@ const Bookmark = ({ id }: { id: string }) => {
     <div onClick={() => {
       router.push(`/post/${postId}`)
       info();
-    }} className="flex p-2 items-center gap-2 group cursor-pointer">
+    }} className="flex p-2 items-start gap-2 group cursor-pointer hover:shadow-lg border-2 transition-all duration-300 ease-in-out">
       {image?.length > 0 && (
         <Image
           src={image[0].file.url}
           alt="User image"
           width={1000}
           height={1000}
-          className=" aspect-square rounded-lg object-cover group-hover:opacity-80 h-[9rem] w-[9rem] transition-opacity ease-in-out"
+          className=" aspect-square rounded-lg object-cover group-hover:opacity-90 h-[8rem] w-[8rem] transition-opacity ease-in-out"
         />
       )}
       <div>
