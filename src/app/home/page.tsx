@@ -1,15 +1,11 @@
 "use client";
 
-import { useRecoilValue } from "recoil";
 import Posts from "../components/homepage/Posts";
 import Search from "../components/search/Search";
-import { createPost } from "../recoil/atoms/modalAtoms";
-import CreatePost from "../components/Posts/CreatePost";
 import Navbar from "../components/navbar/Navbar";
 import Recommendation from "../components/homepage/Recommendation";
 
 const HomePage = () => {
-  const isCreatePost = useRecoilValue(createPost);
   return (
     <div className="m-auto ">
       <Navbar />
@@ -24,7 +20,6 @@ const HomePage = () => {
       </div>
 
 
-      {isCreatePost && <CreatePost />}
     </div>
   );
 };

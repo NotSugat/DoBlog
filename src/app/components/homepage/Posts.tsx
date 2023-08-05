@@ -25,7 +25,7 @@ const Posts = () => {
 
   useEffect(() => {
     getPosts();
-  }, [db]);
+  }, []);
 
   return (
     <div className="">

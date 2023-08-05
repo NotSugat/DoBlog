@@ -16,7 +16,7 @@ import {
 } from "firebase/storage";
 //@ts-ignore
 import { v4 as uuidv4 } from "uuid";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const CreatePost = () => {

@@ -1,16 +1,8 @@
 import {
   DocumentData,
-  addDoc,
-  collection,
-  deleteDoc,
-  doc,
-  getDoc,
-  getDocs,
-  setDoc,
-  updateDoc,
 } from "firebase/firestore";
 import Image from "next/image";
-import React, { MutableRefObject, useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Avatar from "../Avatar";
 import { AiOutlineArrowUp, AiOutlineMinusCircle } from "react-icons/ai";
 import { BsBookmarkPlus, BsBookmarkFill } from "react-icons/bs";
@@ -21,6 +13,8 @@ import { auth } from "@/app/firebase/auth/auth";
 import { useRouter } from "next/navigation";
 import { Menu } from "@headlessui/react";
 import { child, get, onValue, ref, remove, set } from "firebase/database";
+import { useRecoilState } from "recoil";
+import { bookmarkPressed } from "@/app/recoil/atoms/modalAtoms";
 
 interface BlockFile {
   url: string;
@@ -36,6 +30,7 @@ const Post = ({ id, post }: { id: string; post: DocumentData }) => {
   const [isBookmarked, setIsBookmarked] = useState<Boolean>(false);
   const [isInterested, setIsInterested] = useState<Boolean>(true);
   const router = useRouter();
+  const [_isBookmarkPressed, setIsBookmarkPressed] = useRecoilState(bookmarkPressed);
 
   const getContent = () => {
     {
@@ -127,6 +122,7 @@ const Post = ({ id, post }: { id: string; post: DocumentData }) => {
     onValue(bookmarkRef, (snapshot) => {
       if (snapshot.exists()) {
         setIsBookmarked(true);
+        setIsBookmarkPressed(true);
       }
     });
   }, []);
