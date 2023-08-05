@@ -6,14 +6,12 @@ import { BiSearchAlt } from "react-icons/bi";
 
 import Avatar from "../Avatar";
 import { useRecoilState } from "recoil";
-import { createPost } from "@/app/recoil/atoms/modalAtoms";
 import { auth, signOutUser } from "@/app/firebase/auth/auth";
 import { useRouter } from "next/navigation";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useEffect, useState } from "react"
 
 const Navbar = () => {
-  const [isCreatePost, setIsCreatePost] = useRecoilState(createPost);
   const [showSearchBar, setShowSearchBar] = useState<boolean>(false);
 
   const router = useRouter();

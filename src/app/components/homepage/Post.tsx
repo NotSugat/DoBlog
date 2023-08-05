@@ -8,7 +8,7 @@ import { AiOutlineArrowUp, AiOutlineMinusCircle } from "react-icons/ai";
 import { BsBookmarkPlus, BsBookmarkFill } from "react-icons/bs";
 import { BiDotsHorizontal } from "react-icons/bi";
 import Tag from "../Tag";
-import { database, db } from "@/app/firebase/config";
+import { database } from "@/app/firebase/config";
 import { auth } from "@/app/firebase/auth/auth";
 import { useRouter } from "next/navigation";
 import { Menu } from "@headlessui/react";

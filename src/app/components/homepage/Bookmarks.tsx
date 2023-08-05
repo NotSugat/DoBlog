@@ -1,17 +1,13 @@
 
-import { DocumentData, collection, getDocs, orderBy, query } from "firebase/firestore";
+import { DocumentData } from "firebase/firestore";
 import Bookmark from "./Bookmark"
-import { database, db } from "@/app/firebase/config";
+import { database } from "@/app/firebase/config";
 import { useEffect, useState } from "react";
 import { getAuth } from "firebase/auth";
-import { child, get, onValue, ref } from "firebase/database";
+import { onValue, ref } from "firebase/database";
 import { useRecoilValue } from "recoil";
 import { bookmarkPressed } from "@/app/recoil/atoms/modalAtoms";
 
-
-interface bookmark {
-  id: string,
-}
 
 const Bookmarks = () => {
   const [bookmarkedPosts, setBookmarkedPosts] = useState<DocumentData>([]);
@@ -22,7 +18,7 @@ const Bookmarks = () => {
     const bookmarkRef = ref(database, `users/${auth?.currentUser?.uid}/bookmarks/`);
     onValue(bookmarkRef, (snapshot) => {
       if (snapshot.exists()) {
-        console.log("Rommendation bookmarks: \n", snapshot.val());
+        // console.log("Rommendation bookmarks: \n", snapshot.val());
         setBookmarkedPosts(snapshot.val());
 
       } else[
@@ -33,10 +29,6 @@ const Bookmarks = () => {
 
   }, [isBookmarkPressed])
 
-  useEffect(() => {
-    console.log("hello world");
-
-  }, [bookmarkedPosts])
 
   return (
     <div>
