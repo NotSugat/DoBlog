@@ -148,8 +148,11 @@ const PostPage = ({ params }: PostPageProps) => {
     };
 
     getPost();
-    getContent();
   }, []);
+
+  useEffect(() => {
+    getContent();
+  }, [post])
 
   if (loading)
     return <div className="mt-32 text-center text-2xl">Loading...</div>;
@@ -164,7 +167,7 @@ const PostPage = ({ params }: PostPageProps) => {
 
         {/* User Profile section  */}
         <div className="flex">
-          <Avatar imgSrc={post.userProfilePic} height={50} width={50} />
+          <Avatar imgSrc={post.userProfilePic} />
           <div className="flex w-full items-start justify-between  lg:block">
             <div className="ml-4 flex flex-col lg:flex-row  lg:items-center lg:gap-2">
               <p className="cursor-pointer  text-xs font-medium lg:text-base ">
