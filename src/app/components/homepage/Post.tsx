@@ -21,8 +21,6 @@ import { auth } from "@/app/firebase/auth/auth";
 import { useRouter } from "next/navigation";
 import { Menu } from "@headlessui/react";
 import { child, get, onValue, ref, remove, set } from "firebase/database";
-import { v4 as uuidv4 } from "uuid";
-import { log } from "util";
 
 interface BlockFile {
   url: string;

@@ -69,7 +69,7 @@ const Bookmark = ({ id }: { id: string }) => {
         console.log("No such document!");
       }
     };
-
+    console.log(id, " got Bookmark ");
     getPost();
   }, []);
 
