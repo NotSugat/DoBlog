@@ -20,7 +20,7 @@ import { database, db } from "@/app/firebase/config";
 import { auth } from "@/app/firebase/auth/auth";
 import { useRouter } from "next/navigation";
 import { Menu } from "@headlessui/react";
-import { child, get, ref, remove, set } from "firebase/database";
+import { child, get, onValue, ref, remove, set } from "firebase/database";
 import { v4 as uuidv4 } from "uuid";
 import { log } from "util";
 
@@ -125,18 +125,12 @@ const Post = ({ id, post }: { id: string; post: DocumentData }) => {
 
   // set Bookmark as true if post is bookmarked when component loads
   useEffect(() => {
-    const checkBookmark = async () => {
-      const bookmarks = await getDocs(
-        collection(db, "bookmarks", "users", `${auth?.currentUser?.uid}`)
-      );
-      const bookmarkID = bookmarks.docs.find((doc) => id === doc.data().postID);
-
-      if (bookmarkID) {
+    const bookmarkRef = ref(database, `users/${auth?.currentUser?.uid}/bookmarks/${id}`);
+    onValue(bookmarkRef, (snapshot) => {
+      if (snapshot.exists()) {
         setIsBookmarked(true);
       }
-    };
-
-    checkBookmark();
+    });
   }, []);
 
   useEffect(() => {
