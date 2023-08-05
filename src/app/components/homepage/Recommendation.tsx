@@ -13,7 +13,7 @@ const Recommendation = () => {
         <Person fullName={"Sugat Sujakhu"} username="sugat" bio="bio" userProfilePic="" />
       </div>
 
-      <div >
+      <div className="sticky top-[calc(1rem_+_3rem)]" >
         <p className="text-xl px-4 font-semibold py-2" >Continue Reading</p>
 
 

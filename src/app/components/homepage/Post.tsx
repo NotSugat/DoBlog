@@ -16,10 +16,13 @@ import { AiOutlineArrowUp, AiOutlineMinusCircle } from "react-icons/ai";
 import { BsBookmarkPlus, BsBookmarkFill } from "react-icons/bs";
 import { BiDotsHorizontal } from "react-icons/bi";
 import Tag from "../Tag";
-import { db } from "@/app/firebase/config";
+import { database, db } from "@/app/firebase/config";
 import { auth } from "@/app/firebase/auth/auth";
 import { useRouter } from "next/navigation";
 import { Menu } from "@headlessui/react";
+import { child, get, ref, remove, set } from "firebase/database";
+import { v4 as uuidv4 } from "uuid";
+import { log } from "util";
 
 interface BlockFile {
   url: string;
@@ -89,55 +92,36 @@ const Post = ({ id, post }: { id: string; post: DocumentData }) => {
   const handleBookmark = async () => {
     try {
       if (!isBookmarked) {
-        const bookmarkRef = await addDoc(
-          collection(db, "bookmarks", "users", `${auth?.currentUser?.uid}`),
+        set(
+          ref(
+            database,
+            `users/${auth?.currentUser?.uid}/bookmarks/${id}`
+          ),
           {
             postID: id,
           }
-        );
-        const docRef = doc(db, "posts", id);
-        const docSnap = await getDoc(docRef);
-
-        const currentBookmarkCount = docSnap.data()?.bookmarkCount || 0;
-
-        const newBookmarkCount = currentBookmarkCount + 1;
-
-        await setDoc(docRef, {
-          ...docSnap.data(),
-          bookmarkCount: newBookmarkCount,
-        });
-
-        console.log("Bookmark no: ", post.bookmarkCount);
-        console.log("Bookmark added with ID: ", bookmarkRef.id);
+        ).then(() => console.log(id, " is added to realtime db"));
       } else {
-        const bookmarks = await getDocs(
-          collection(db, "bookmarks", "users", `${auth?.currentUser?.uid}`)
-        );
-        const bookmarkID = bookmarks.docs.find(
-          (doc) => id === doc.data().postID
-        );
+        const dbRef = ref(database);
 
-        if (bookmarkID) {
-          await deleteDoc(bookmarkID.ref);
+        get(
+          child(dbRef, `users/${auth?.currentUser?.uid}/bookmarks/${id}`)
+        ).then((snapshot) => {
+          if (snapshot.exists()) {
 
-          const docRef = doc(db, "posts", id);
-          const docSnap = await getDoc(docRef);
-          const currentBookmarkCount = docSnap.data()?.bookmarkCount || 0;
-          const newBookmarkCount = currentBookmarkCount - 1;
+            console.log(snapshot.val().postID + " post bookmark removed");
 
-          await setDoc(docRef, {
-            ...docSnap.data(),
-            bookmarkCount: newBookmarkCount,
-          });
-          console.log("Bookmark no: ", post.bookmarkCount);
-          console.log("Bookmark deleted with ID: ", bookmarkID.ref);
-        }
+            const bookmarkRef = ref(database, `users/${auth?.currentUser?.uid}/bookmarks/${id}`);
+            remove(bookmarkRef);
+          } else {
+            console.log("No data available");
+          }
+        });
       }
     } catch (error) {
       console.log(error);
     }
   };
-
 
   // set Bookmark as true if post is bookmarked when component loads
   useEffect(() => {
@@ -188,7 +172,7 @@ const Post = ({ id, post }: { id: string; post: DocumentData }) => {
         onClick={() => router.push(`/post/${id}`)}
       >
         <div className="col-span-2 max-h-[40%]   ">
-          <h2 className=" truncate-overflow-2 text-lg leading-6 mb-2 font-medium lg:py-2  lg:text-2xl">
+          <h2 className=" truncate-overflow-2 mb-2 text-lg font-medium leading-6 lg:py-2  lg:text-2xl">
             {post.postTitle}
           </h2>
           <p className="truncate-overflow-3 text-sm lg:text-lg">{text}</p>
@@ -247,15 +231,19 @@ const Post = ({ id, post }: { id: string; post: DocumentData }) => {
             <Menu.Button title="More settings">
               <BiDotsHorizontal className="post-icon" />
             </Menu.Button>
-            <Menu.Items className="absolute translate-y-[calc(1.5rem_+_1rem_+_1rem)] lg:translate-y-[calc(1.75rem_+_1.5rem_+_1.5rem)] translate-x-4 lg:translate-x-8 grid place-items-start bg-gray-200 px-2 text-gray-700 z-20 rounded-md">
-              <Menu.Item disabled >
-                <span className="opacity-75 flex w-full justify-center text-base lg:text-xl p-2"> <AiOutlineArrowUp /></span>
+            <Menu.Items className="absolute z-20 grid translate-x-4 translate-y-[calc(1.5rem_+_1rem_+_1rem)] place-items-start rounded-md bg-gray-200 px-2 text-gray-700 lg:translate-x-8 lg:translate-y-[calc(1.75rem_+_1.5rem_+_1.5rem)]">
+              <Menu.Item disabled>
+                <span className="flex w-full justify-center p-2 text-base opacity-75 lg:text-xl">
+                  {" "}
+                  <AiOutlineArrowUp />
+                </span>
               </Menu.Item>
 
               <Menu.Item>
                 {({ active }) => (
                   <a
-                    className={`${active && 'bg-blue-500'} p-1 text-xs lg:text-base`}
+                    className={`${active && "bg-blue-500"
+                      } p-1 text-xs lg:text-base`}
                     href="/account-settings"
                   >
                     Mute this author
@@ -265,7 +253,8 @@ const Post = ({ id, post }: { id: string; post: DocumentData }) => {
               <Menu.Item>
                 {({ active }) => (
                   <button
-                    className={`${active && 'bg-blue-500'} w-full text-start p-1 text-xs lg:text-base`}
+                    className={`${active && "bg-blue-500"
+                      } w-full p-1 text-start text-xs lg:text-base`}
                   >
                     Report
                   </button>
