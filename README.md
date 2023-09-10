@@ -1,3 +1,6 @@
+Social Media application where user motivates user to share their thought through blogs.
+Project is built using Next js, Tailwind CSS, Recoil, firebase
+
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started
