@@ -24,7 +24,7 @@
     "@types/react": "18.2.0",
     "@types/react-dom": "18.2.1",
     "autoprefixer": "10.4.14",
-    "axios": "^1.4.0",
+    "axios": "^1.7.4",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.0.0",
     "editorjs-react-renderer": "^3.5.1",
